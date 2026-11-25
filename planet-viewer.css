@@ -1,0 +1,31 @@
+/* Iba detail planéty: kompaktná 3D plocha a ovládanie. */
+.planet-viewer[hidden], #detail-img[hidden] { display: none; }
+.planet-viewer { width: 100%; max-width: 350px; min-width: 0; text-align: center; }
+.planet-viewer-stage {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid #3e5075;
+  border-radius: 14px;
+  background: radial-gradient(ellipse at 48% 45%, #223556 0%, #111c32 48%, #080f20 100%);
+}
+.planet-viewer-label { position: absolute; top: 12px; left: 12px; color: #b0c5f3; font: 600 10px/1.2 Arial, sans-serif; letter-spacing: .12em; pointer-events: none; }
+#planet-canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+#planet-canvas:active { cursor: grabbing; }
+#planet-canvas:focus-visible { outline: 2px solid #b6caff; outline-offset: -3px; }
+.planet-viewer-controls { display: flex; gap: 5px; align-items: stretch; justify-content: center; margin-top: 9px; }
+.planet-viewer-controls button { min-width: 44px; min-height: 44px; padding: 5px 8px; border: 1px solid var(--control-border); border-radius: 8px; color: var(--control-text); background: var(--control-bg); font: inherit; font-size: .8rem; font-weight: 600; cursor: pointer; }
+.planet-viewer-controls button:first-child, .planet-viewer-controls button:last-child { font-size: 1.3rem; }
+.planet-viewer-controls button:disabled { opacity: .45; cursor: default; }
+@media (hover: hover) { .planet-viewer-controls button:not(:disabled):hover { background: var(--control-hover); } }
+#planet-viewer-help, .planet-viewer-note { font-size: .75rem; line-height: 1.45; color: var(--muted); margin: 9px 0 0; }
+.planet-viewer-note { font-size: .7rem; margin-top: 5px; }
+
+/* Drag má prednosť pred gestami prehliadača iba vo vnútri modelu. */
+.planet-viewer-stage { touch-action: none; user-select: none; -webkit-user-select: none; isolation: isolate; }
+#planet-canvas { position: relative; z-index: 1; }
+.planet-viewer-label { z-index: 2; }
+.planet-viewer-stage.is-dragging, .planet-viewer-stage.is-dragging #planet-canvas { cursor: grabbing; }
+.planet-viewer-note a { color: inherit; }
+.planet-viewer-note[hidden] { display: none; }
+@media (min-width: 1025px) { .planet-detail { grid-template-columns: minmax(0, 320px) minmax(0, 1fr); } }

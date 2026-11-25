@@ -1,0 +1,123 @@
+/* Frosted surfaces – opacity belongs to the background, never the content.
+   The existing layouts, states and canvas renderers are unchanged. */
+:root {
+  --glass-top: rgba(29, 44, 72, .72);
+  --glass-bottom: rgba(16, 26, 48, .64);
+  --glass-dense-top: rgba(31, 47, 76, .82);
+  --glass-dense-bottom: rgba(15, 24, 45, .79);
+  --glass-inset: rgba(17, 28, 51, .62);
+  --glass-hover-top: rgba(38, 57, 92, .88);
+  --glass-hover-bottom: rgba(22, 35, 63, .83);
+  --glass-rim: rgba(151, 180, 233, .25);
+  --glass-rim-top: rgba(186, 211, 255, .37);
+  --glass-shine: rgba(213, 228, 255, .075);
+  --glass-shadow: 0 12px 34px rgba(3, 9, 25, .22), inset 0 1px 0 var(--glass-shine);
+  --glass-header: rgba(10, 17, 34, .84);
+  --glass-header-solid: rgba(10, 17, 34, .94);
+  --glass-dialog: rgba(17, 26, 48, .95);
+  --glass-backdrop: rgba(2, 6, 18, .65);
+  --section-wash: #111c324d;
+}
+:root[data-theme="light"] {
+  --glass-top: rgba(255, 255, 255, .76);
+  --glass-bottom: rgba(239, 246, 255, .64);
+  --glass-dense-top: rgba(255, 255, 255, .86);
+  --glass-dense-bottom: rgba(242, 247, 255, .82);
+  --glass-inset: rgba(249, 252, 255, .67);
+  --glass-hover-top: rgba(255, 255, 255, .96);
+  --glass-hover-bottom: rgba(229, 239, 255, .90);
+  --glass-rim: rgba(86, 113, 167, .26);
+  --glass-rim-top: rgba(255, 255, 255, .94);
+  --glass-shine: rgba(255, 255, 255, .65);
+  --glass-shadow: 0 12px 32px rgba(35, 58, 99, .09), inset 0 1px 0 var(--glass-shine);
+  --glass-header: rgba(246, 250, 255, .88);
+  --glass-header-solid: rgba(249, 252, 255, .97);
+  --glass-dialog: rgba(248, 251, 255, .96);
+  --glass-backdrop: rgba(20, 35, 62, .55);
+  --section-wash: #f5f8ff60;
+}
+/* Small surfaces: no live blur, avoiding dozens of expensive backdrop layers. */
+:root :is(.solar-overview .info-card, .planet-card, .gallery-item, .about-card, .about-tech) {
+  background: linear-gradient(145deg, var(--glass-top), var(--glass-bottom));
+  border-color: var(--glass-rim);
+  border-top-color: var(--glass-rim-top);
+  box-shadow: var(--glass-shadow);
+}
+/* Information-heavy surfaces get a slightly denser frost. */
+:root :is(.planet-detail, .fact-box, .about-intro, .about-implementation, .author-card),
+:root #kviz .mission-quiz {
+  background: radial-gradient(ellipse at 10% 0%, var(--glass-shine), transparent 65%),
+              linear-gradient(145deg, var(--glass-dense-top), var(--glass-dense-bottom));
+  border-color: var(--glass-rim);
+  border-top-color: var(--glass-rim-top);
+  box-shadow: var(--glass-shadow);
+}
+/* Preserve an opaque data table, input controls, media and answer states. */
+:root :is(.about-stats div, .author-link) {
+  background: var(--glass-inset);
+  border-color: var(--glass-rim);
+  box-shadow: inset 0 1px 0 var(--glass-shine);
+}
+@media (hover: hover) {
+  :root :is(.solar-overview .solar-small-interactive, .planet-card:not(.active), .about-card, .gallery-item, .author-link):hover {
+    background: linear-gradient(145deg, var(--glass-hover-top), var(--glass-hover-bottom));
+    border-color: var(--control-hover-border);
+  }
+}
+:root :is(.solar-overview .solar-small-interactive, .author-link):focus-visible {
+  background: linear-gradient(145deg, var(--glass-hover-top), var(--glass-hover-bottom));
+  border-color: var(--control-hover-border);
+}
+/* Selected planet must remain unmistakable, including without motion. */
+:root .planet-card.active, :root .planet-card.active:hover {
+  background: var(--selected-bg);
+  border-color: var(--selected-border);
+  box-shadow: inset 0 0 0 2px var(--selected-border), var(--glass-shadow);
+}
+/* Header is readable even when bright content scrolls underneath it. */
+:root .site-header {
+  background: var(--glass-header-solid);
+  border-bottom-color: var(--glass-rim);
+  box-shadow: 0 6px 22px #03081912, inset 0 -1px 0 var(--glass-shine);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* Modal shells get a subtle translucent finish, but not the 3D viewports.
+   Sticky toolbars remain solid to prevent text showing through while scrolling. */
+:root :is(.gallery-modal, .object-modal) {
+  background: var(--glass-dialog);
+  border-color: var(--glass-rim-top);
+  box-shadow: 0 24px 80px #03081765, inset 0 1px 0 var(--glass-shine);
+}
+:root :is(.gallery-modal, .object-modal)::backdrop { background: var(--glass-backdrop); }
+:root .gallery-modal .modal-inner { background: transparent; }
+:root .gallery-modal .modal-top { background: #121b32; }
+:root[data-theme="light"] .gallery-modal .modal-top { background: #f8fbff; }
+/* Live frost only on a few outer surfaces, only on desktop high/medium profiles.
+   Avoid it on mobile, reduced-motion, when a model/dialog is active or when
+   the adaptive background selects the low tier. No additional animation loop. */
+@supports (backdrop-filter: blur(6px)) or (-webkit-backdrop-filter: blur(6px)) {
+  @media (min-width: 961px) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    :root.motion-enabled:has(.space-background:is([data-quality="high"], [data-quality="medium"])[data-running="true"]):not(:has(dialog[open])) .site-header {
+      background: var(--glass-header);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+    :root.motion-enabled:has(.space-background[data-quality="high"][data-running="true"]):not(:has(dialog[open])) :is(.about-intro, .author-card) {
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+    }
+  }
+}
+@media (max-width: 960px) {
+  :root .navigation { background: var(--glass-header-solid); border-color: var(--glass-rim); }
+}
+@media (prefers-contrast: more) {
+  :root, :root[data-theme="light"] {
+    --glass-top: var(--card); --glass-bottom: var(--card);
+    --glass-dense-top: var(--card); --glass-dense-bottom: var(--card);
+    --glass-inset: var(--bg-soft); --glass-hover-top: var(--control-hover); --glass-hover-bottom: var(--control-hover);
+    --glass-rim: var(--control-border); --glass-rim-top: var(--control-border);
+    --glass-header: var(--bg); --glass-header-solid: var(--bg); --glass-dialog: var(--card);
+  }
+}

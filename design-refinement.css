@@ -1,0 +1,100 @@
+/* Unified visual system. Existing renderer/canvas geometry remains untouched. */
+:root {
+  --premium-radius: 18px;
+  --premium-line: #344463;
+  --premium-shadow: 0 14px 40px #03081732;
+  --section-space: clamp(66px, 7vw, 112px);
+  --header-offset: 92px;
+  --premium-surface: linear-gradient(145deg, #192541, #111a30 76%);
+  --section-wash: #111c3280;
+  --section-glow: #678ae215;
+}
+:root[data-theme="light"] {
+  --premium-line: #c3d1e8;
+  --premium-shadow: 0 12px 34px #253f6c12;
+  --premium-surface: linear-gradient(145deg, #fff, #f0f5ff 90%);
+  --section-wash: #f5f8ff82;
+  --section-glow: #668bdc13;
+}
+body {font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif; line-height:1.65;}
+.container {width:min(1220px,calc(100% - 48px));}
+.site-header .container {width:min(1430px,calc(100% - 40px));}
+.header-inner {min-height:76px;gap:16px;}
+.logo {white-space:nowrap;letter-spacing:.105em;}
+.navigation {gap:5px 14px;justify-content:center;}
+.navigation a {position:relative;font-size:13px;font-weight:600;line-height:1.45;padding:12px 2px;}
+.navigation a[aria-current="location"] {color:var(--accent-bright);}
+.navigation a[aria-current="location"]::after {content:"";position:absolute;bottom:3px;left:2px;right:2px;height:2px;border-radius:5px;background:var(--accent);}
+.site-header::after {content:"";position:absolute;bottom:-1px;left:0;width:100%;height:2px;transform:scaleX(var(--reading-progress,0));transform-origin:left;background:linear-gradient(90deg,var(--accent),#88cfc7);pointer-events:none;}
+body .hero {border-bottom:0;background:linear-gradient(180deg,#090f2050,transparent 94%);}
+[data-theme="light"] body .hero {background:linear-gradient(180deg,#f7faff75,transparent 94%);}
+.hero-grid {min-height:clamp(540px,73vh,760px);gap:clamp(24px,5vw,74px);}
+.hero-copy h1 {font-size:clamp(38px,5.4vw,76px);letter-spacing:-.055em;line-height:1.06;}
+.hero-description {font-size:clamp(16px,1.6vw,20px);max-width:51ch;line-height:1.7;}
+.hero-art .orbit-model {width:min(100%,530px);}
+body .section {position:relative;isolation:isolate;border-top:0;padding:var(--section-space) 0;scroll-margin-top:var(--header-offset);background:linear-gradient(180deg,transparent,var(--section-wash) 21%,var(--section-wash) 78%,transparent);}
+body .section::before {content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at var(--glow-position, 85% 20%),var(--section-glow),transparent 65%);}
+#o-vesmire,#porovnanie,#o-projekte {--glow-position:10% 35%;}
+#zaujimavosti,#galeria {--section-glow:#927ecb17;}
+#kviz,#kontakt {--section-glow:#66b7c416;}
+[data-theme="light"] body .section {background:linear-gradient(180deg,transparent,var(--section-wash) 21%,var(--section-wash) 78%,transparent);}
+h2 {font-size:clamp(29px,3.5vw,45px);letter-spacing:-.038em;line-height:1.16;margin-bottom:16px;text-wrap:balance;}
+.section-description {max-width:72ch;line-height:1.75;margin-bottom:32px;}
+.info-card,.planet-card,.gallery-item,.about-card,.about-tech,.author-card,.fact-box,.table-scroll,.about-intro,.about-implementation {border-color:var(--premium-line);border-radius:var(--premium-radius);box-shadow:var(--premium-shadow);}
+.solar-overview .info-card,.planet-card,.gallery-item,.about-card,.author-card {background:var(--premium-surface);}
+.planet-card.active {background:var(--selected-bg);border-color:var(--selected-border);}
+.solar-overview,.planet-grid,.about-grid,.about-tech-grid {gap:18px;}
+.planet-card {min-height:190px;}
+.planet-card img {width:126px;height:126px;}
+.planet-card strong {font-size:17px;}
+.planet-detail {border-radius:22px;box-shadow:var(--premium-shadow);gap:clamp(20px,3vw,42px);}
+.planet-facts dd,.diameter-value,.distance-value,.about-stats strong {font-variant-numeric:tabular-nums;}
+.detail-copy h3 {letter-spacing:-.035em;}
+.solar-card-copy {padding:20px 22px 24px;}
+.solar-card-cta {color:var(--accent-bright);}
+[data-theme="light"] .solar-small-interactive:is(:hover,:focus-visible) .solar-card-cta {color:#224d9e;}
+.fact-box {overflow:hidden;}
+.fact-content {gap:4px;}
+.fact-progress {border-radius:999px;}
+.table-scroll {background:var(--card);}
+.planet-comparison tbody tr:not(.planet-smallest):not(.planet-largest):nth-child(even) {background:color-mix(in srgb,var(--card) 75%,var(--bg-soft));}
+.diameter-track {height:6px;}
+#galeria .gallery-grid {gap:22px;}
+.gallery-item figcaption {padding:20px;gap:8px;}
+.gallery-item figcaption strong {font-size:20px;letter-spacing:-.02em;}
+.gallery-item figcaption small {opacity:.95;}
+#kviz .mission-quiz {border-color:var(--premium-line);box-shadow:var(--premium-shadow);}
+.about-card {padding:24px;}
+.about-stats div {border-radius:14px;border-color:var(--premium-line);}
+.about-icon {border:1px solid var(--premium-line);}
+.about-link {padding-top:18px;}
+.about-subtitle {margin-top:38px;}
+.author-link {border-radius:13px;}
+.primary-button,.secondary-button,.theme-toggle,.motion-toggle,.language-switch button {border-radius:12px;}
+.primary-button {box-shadow:0 6px 24px #7e9fff22;}
+:where(a,button,select,input,[tabindex]):focus-visible {outline:2px solid var(--focus);outline-offset:4px;}
+/* One-shot reveal; never hide unobserved content or depend on JavaScript for readability. */
+@keyframes premium-arrive {from {opacity:.28;translate:0 14px;}to {opacity:1;translate:0 0;}}
+.motion-enabled .premium-enter {animation:premium-arrive .48s cubic-bezier(.2,.72,.25,1) var(--reveal-delay,0ms) both;}
+@keyframes premium-bar {from {scale:0 1;}to {scale:1 1;}}
+.motion-enabled .premium-chart-enter .diameter-track>span {transform-origin:left;animation:premium-bar .8s cubic-bezier(.2,.72,.25,1) both;}
+.counting {position:relative;color:transparent!important;}
+.counting>.count-visual {position:absolute;inset:0 auto auto 0;color:var(--count-ink);white-space:nowrap;font:inherit;pointer-events:none;}
+.motion-enabled :is(.info-card,.planet-card,.gallery-item,.about-card,.author-link,.about-tech) {transition:background-color .24s,color .24s,border-color .24s,box-shadow .24s,transform .24s;}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .motion-enabled :is(.solar-small-interactive,.planet-card,.gallery-item,.about-card,.author-link):hover {border-color:var(--selected-border);box-shadow:0 12px 30px #5678c426;transform:translateY(-3px);}
+  .motion-enabled :is(.primary-button,.secondary-button,.motion-toggle,.theme-toggle,.language-switch button,.answer-button,.q-options button):not(:disabled):active {transform:scale(.975);}
+  .motion-enabled .about-link:hover span:last-child {transform:translateX(3px);}
+  .motion-enabled .about-link span:last-child {transition:transform .2s;}
+}
+@supports (transition-behavior:allow-discrete) {
+  .motion-enabled .object-modal {opacity:0;transform:translateY(8px) scale(.99);transition:opacity .2s,transform .2s,display .2s allow-discrete,overlay .2s allow-discrete;}
+  .motion-enabled .object-modal[open] {opacity:1;transform:none;}
+  @starting-style {.motion-enabled .object-modal[open]{opacity:0;transform:translateY(8px) scale(.99);}}
+}
+@media(min-width:961px) and (max-width:1190px) {.navigation{gap:2px 10px;}.navigation a{padding:5px 2px;font-size:12px;}.header-inner{gap:10px;}}
+@media(max-width:960px){.navigation{justify-content:flex-start;gap:2px;}.navigation a{padding:10px 13px;font-size:15px;}.navigation a[aria-current="location"]{background:var(--selected-bg);}.navigation a[aria-current="location"]::after{left:5px;right:auto;top:10px;bottom:10px;width:2px;height:auto;}.hero-grid{min-height:0;}.header-inner{min-height:67px;}}
+@media(max-width:760px){.container,.site-header .container{width:calc(100% - 32px);}.hero-copy h1{font-size:clamp(36px,8vw,52px);}.hero-grid{gap:14px;}.hero-copy{padding:44px 0 8px;}.planet-card{min-height:88px;}.planet-card img{width:64px;height:64px;}.solar-overview,.planet-grid,.about-grid,.about-tech-grid{gap:12px;}.section-description{margin-bottom:24px;}.about-card{padding:18px;}.solar-card-copy{padding:14px 12px 14px 4px;}}
+@media(max-width:500px){.header-inner{gap:7px;}.container,.site-header .container{width:calc(100% - 24px);}.gallery-item figcaption{padding:16px;}.section-description{font-size:15px;}.hero-description{margin-bottom:22px;}}
+@media(prefers-reduced-motion:reduce){.premium-enter,.premium-chart-enter .diameter-track>span{animation:none!important;}}
+html:not(.motion-enabled) .premium-enter,html:not(.motion-enabled) .premium-chart-enter .diameter-track>span {animation:none!important;}

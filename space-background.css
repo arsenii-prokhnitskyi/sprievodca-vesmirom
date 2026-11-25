@@ -1,0 +1,31 @@
+/* Pevná dekoratívna vrstva: žiadne prekrytie ovládacích prvkov. */
+body { isolation: isolate; }
+.space-background {
+  position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+  background: radial-gradient(ellipse at 72% 35%, #12213b 0, transparent 64%),
+              radial-gradient(ellipse at 12% 90%, #15162f 0, transparent 60%), #080e1e;
+}
+.space-dust { position: absolute; inset: -12%; background-position: center; background-repeat: no-repeat; background-size: cover; transform: translate3d(0,0,0); }
+.space-dust-far { background-image: url('assets/space-dust-blue.webp'); opacity: .80; }
+.space-dust-near { background-image: url('assets/space-dust-violet.webp'); opacity: .55; }
+#starfield { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+/* Tónované sekcie zachovávajú hranice a kontrast; samotné karty ostávajú nezmenené. */
+body .hero { background: linear-gradient(105deg, #090f20b8, #090f2030 75%); }
+body .section { background: #0a102330; }
+body .intro-section, body .comparison-section, body .about-section, body .contact-section { background: #101a3040; }
+body .facts-section, body .quiz-section { background: #10183050; }
+body .gallery-section { background: linear-gradient(135deg,#101a3045,#090f2035); }
+body .site-footer { background: #080c1ba8; }
+[data-theme="light"] .space-background { background: radial-gradient(ellipse at 72% 35%, #dbe8ff 0, transparent 70%), radial-gradient(ellipse at 10% 90%, #e7e3f7 0, transparent 65%), #f1f5fd; }
+[data-theme="light"] .space-dust-far { opacity: .23; }
+[data-theme="light"] .space-dust-near { opacity: .16; }
+[data-theme="light"] body .hero { background: linear-gradient(105deg,#f7faffc9,#f7faff30 75%); }
+[data-theme="light"] body .section { background: #f7faff38; }
+[data-theme="light"] body .intro-section, [data-theme="light"] body .comparison-section, [data-theme="light"] body .about-section, [data-theme="light"] body .contact-section { background: #edf3ff55; }
+[data-theme="light"] body .facts-section, [data-theme="light"] body .quiz-section { background: #f5f8ff60; }
+[data-theme="light"] body .gallery-section { background: linear-gradient(135deg,#eaf0fc50,#f7faff40); }
+[data-theme="light"] body .site-footer { background: #edf3ffb8; }
+@media (prefers-reduced-motion: reduce) { .space-dust { transform: none !important; } }
+
+/* Úsporný profil používa jedinú vrstvu prachu. */
+.space-background[data-quality="low"] .space-dust-near { display: none; }

@@ -1,0 +1,57 @@
+/* V29: interaktívny úvod a vizuálny atlas Slnečnej sústavy. */
+.orbit-ring { pointer-events: none; }
+.orbit-model::before { pointer-events: none; }
+.orbit-target { position: absolute; display: grid; place-items: center; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; pointer-events: auto; border-radius: 50%; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.orbit-model .orbit-sun { inset: auto; top: 50%; left: 50%; width: 13%; min-width: 36px; aspect-ratio: 1; transform: translate(-50%, -50%); background: transparent; box-shadow: none; animation: none; z-index: 1; }
+.orbit-model .orbit-sun img { width: 100%; filter: drop-shadow(0 0 10px #ffae56aa) drop-shadow(0 0 22px #ff8a2e66); }
+.orbit-planet-button { top: 0; left: 50%; width: max(32px, var(--planet-size)); aspect-ratio: 1; transform: translate(-50%, -50%) rotate(calc(0deg - var(--phase))); animation: orbit-counterspin var(--orbit-time) linear infinite; }
+.orbit-target img { width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; filter: drop-shadow(0 0 5px #9eb8ff55); pointer-events: none; }
+.orbit-tooltip { position: absolute; bottom: calc(100% + 5px); left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 3px 9px; border-radius: 7px; background: var(--control-bg); border: 1px solid var(--control-border); color: var(--control-text); font-size: 12px; line-height: 1.5; font-weight: 600; opacity: 0; pointer-events: none; z-index: 5; }
+.orbit-target:is(:hover,:focus-visible) .orbit-tooltip { opacity: 1; }
+.orbit-target:is(:hover,:focus-visible) img { filter: drop-shadow(0 0 8px #a3b9ffaa) brightness(1.15); }
+.orbit-target:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.orbit-ring:has(.orbit-target:is(:hover,:focus-visible)) { z-index: 4; }
+.orbit-model:has(.orbit-target:focus-visible) .orbit-ring, .orbit-model:has(.orbit-target:focus-visible) .orbit-planet-button,
+.orbit-model.orbit-pressed .orbit-ring, .orbit-model.orbit-pressed .orbit-planet-button,
+html:not(.motion-enabled) .orbit-planet-button, .orbit-offscreen .orbit-planet-button { animation-play-state: paused; }
+@media (hover: hover) and (pointer: fine) {
+  .orbit-model:has(.orbit-target:hover) .orbit-ring, .orbit-model:has(.orbit-target:hover) .orbit-planet-button { animation-play-state: paused; }
+}
+@keyframes orbit-counterspin { to { transform: translate(-50%, -50%) rotate(calc(-360deg - var(--phase))); } }
+@media (prefers-reduced-motion: reduce) { .orbit-planet-button { animation: none !important; } }
+.orbit-picker { text-align: center; margin: 4px auto 0; width: min(100%, 420px); color: var(--muted); font-size: 13px; }
+.orbit-picker summary { cursor: pointer; padding: 7px; min-height: 36px; }
+.orbit-picker > div { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; margin-top: 6px; }
+.orbit-picker button { min-height: 44px; padding: 5px; border: 1px solid var(--control-border); border-radius: 8px; color: var(--control-text); background: var(--control-bg); cursor: pointer; font: inherit; }
+.orbit-picker button:hover { background: var(--control-hover); }
+/* Atlas: two large features, four smaller object categories. */
+.solar-overview { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }
+.solar-overview .info-card { padding: 0; overflow: hidden; min-width: 0; background: var(--card); }
+.solar-overview .solar-feature { grid-column: span 2; display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1fr); align-items: center; }
+.solar-card-art { position: relative; isolation: isolate; min-height: 138px; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 48%, #7798ff1a, transparent 70%); }
+.solar-card-art::before { content: ''; position: absolute; inset: 12% 15%; border-radius: 50%; border: 1px solid var(--line); z-index: -1; transform: rotate(-22deg) scaleY(.7); }
+.solar-card-art img { width: min(100%, 168px); height: auto; object-fit: contain; display: block; filter: drop-shadow(0 4px 12px #03091b35); }
+.solar-sun-art { background: radial-gradient(ellipse at center, #ffae4233, transparent 70%); }
+.solar-sun-art img { width: min(100%, 220px); filter: drop-shadow(0 0 16px #ff9d3755); }
+.solar-planet-art { min-height: 200px; }
+.solar-planet-art img { position: absolute; width: 74%; max-width: 190px; }
+.solar-planet-art img:nth-child(1) { width: 44%; left: 3%; top: 8%; z-index: 2; }
+.solar-planet-art img:nth-child(2) { right: 0; top: 4%; }
+.solar-planet-art img:nth-child(3) { width: 68%; left: 9%; bottom: 0; z-index: 3; }
+.solar-card-copy { padding: 18px 20px 22px; }
+.solar-stat { display: block; font-size: 12px; font-weight: 700; color: var(--accent-bright); margin-bottom: 6px; }
+.solar-overview .info-card h3 { font-size: clamp(18px,2vw,24px); line-height: 1.2; margin: 0 0 9px; }
+.solar-overview .info-card p { font-size: 14px; line-height: 1.6; }
+.solar-overview .secondary-button { margin-top: 14px; font-size: 13px; min-height: 42px; padding: 8px 12px; gap: 8px; }
+.solar-overview-note { margin: 12px 0 0; font-size: 12px; color: var(--muted); }
+.solar-detail-shortcut { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+.solar-detail-shortcut a { color: var(--accent-bright); font-size: 14px; font-weight: 600; padding: 8px 0; }
+.planet-detail[hidden], #sun-static[hidden] { display: none !important; }
+#planet-detail, #sun-detail { scroll-margin-top: 100px; }
+.sun-viewer-slot { display: grid; place-items: center; min-width: 0; }
+#sun-static { max-width: 100%; height: auto; }
+.sun-detail .detail-highlight + .detail-highlight { margin-top: 12px; }
+.sun-detail #planet-canvas { filter: drop-shadow(0 0 12px #ffad4050); }
+@media (hover: hover) and (pointer: fine) { .motion-enabled .solar-overview .info-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 8px 25px #5279d524; } }
+@media (max-width: 960px) { .solar-overview { grid-template-columns: repeat(2,minmax(0,1fr)); } .solar-overview .solar-feature { grid-column: span 1; grid-template-columns: 1fr; } .solar-card-art { min-height: 150px; } }
+@media (max-width: 500px) { .solar-overview { grid-template-columns: 1fr; } .solar-overview .solar-feature, .solar-overview .solar-small { display: grid; grid-template-columns: minmax(0, .65fr) minmax(0,1fr); align-items: center; } .solar-card-copy { padding: 14px 12px 14px 4px; } .solar-planet-art { min-height: 140px; } .solar-card-art { min-height: 110px; } #planet-detail,#sun-detail { scroll-margin-top: 150px; } .orbit-planet-button { width: max(32px,var(--planet-size)); } }

@@ -1,0 +1,149 @@
+/* Responsive audit: preserve desktop visual system; improve narrow and short viewports. */
+@media (max-width: 960px) {
+  .navigation.is-open {max-height: max(80px,calc(100dvh - var(--header-offset) - 4px));overscroll-behavior:contain;}
+  body:has(.language-switch:not([hidden])) :is(.section,.hero,#obsah),
+  #planet-detail,#sun-detail,#kviz .mission-quiz,#kviz #quiz-question {scroll-margin-top:var(--header-offset);}
+  .menu-toggle,.navigation a {min-height:44px;}
+  .orbit-picker summary {min-height:44px;display:flex;align-items:center;justify-content:center;}
+  .orbit-picker summary::before {content:'▸';margin-inline-end:8px;}
+  .orbit-picker[open] summary::before {content:'▾';}
+}
+@media (min-width:390px) and (max-width:500px) {
+  .header-inner:has(.language-switch:not([hidden])) {flex-wrap:nowrap;}
+  .header-actions:has(.language-switch:not([hidden])) {width:auto;gap:4px;}
+  .logo {font-size:16px;letter-spacing:.055em;}
+  .logo-symbol {font-size:21px;margin-right:2px;}
+  .menu-toggle {width:44px;min-width:44px;padding:0;justify-content:center;}
+  .menu-text {display:none;}
+}
+@media (max-width:389px) {
+  .header-inner:has(.language-switch:not([hidden])) {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;padding-block:7px;}
+  .header-actions:has(.language-switch:not([hidden])) {display:contents;}
+  .header-inner:has(.language-switch:not([hidden])) .logo {grid-column:1;grid-row:1;}
+  .header-inner:has(.language-switch:not([hidden])) .menu-toggle {grid-column:2;grid-row:1;justify-self:end;min-width:44px;}
+  .header-inner:has(.language-switch:not([hidden])) .theme-toggle {grid-column:2;grid-row:2;justify-self:end;}
+  .header-inner:has(.language-switch:not([hidden])) .language-switch {grid-column:1;grid-row:2;justify-self:start;}
+}
+@media (min-width:390px) and (max-width:640px) {
+  .planet-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .planet-card {display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:142px;padding:12px 8px;text-align:center;}
+  .planet-card img {width:78px;height:78px;margin:0;}
+  .planet-card strong {align-self:center;line-height:1.35;}
+  .planet-card span {align-self:center;}
+  .planet-card .planet-selected-mark {top:8px;right:8px;}
+}
+@media (max-width:500px) {
+  body .section {padding:50px 0;}
+  .hero-grid {padding:25px 0;}
+  .hero-copy {padding:10px 0 0;}
+  .hero-copy h1 {font-size:clamp(30px,8.6vw,43px);overflow-wrap:break-word;}
+  .hero-actions > :is(a,button) {max-width:100%;white-space:normal;}
+  .hero-art {padding:8px 0;}
+  .planet-detail {padding:15px;}
+  .planet-facts dt {font-size:13px;}
+  .comparison-sort .secondary-button {font-size:13px;padding:9px 10px;min-height:44px;}
+  .planet-comparison td {white-space:normal;overflow-wrap:normal;}
+  .planet-comparison thead th {font-size:12px;}
+  .planet-comparison .size-label {font-size:11px;}
+  .fact-content {padding:17px;}
+  .fact-visual {height:190px;}
+  .about-stats div {padding:11px;}
+  .about-stats span {font-size:13px;}
+  .author-link {gap:9px;padding:10px;}
+  .author-link-copy {min-width:0;overflow-wrap:anywhere;}
+  .q-game-header button {min-height:44px;}
+  .q-visual figcaption,.q-options button small {font-size:12px;}
+}
+@media (max-width:360px) {
+  .solar-overview .solar-feature,.solar-overview .solar-small {grid-template-columns:minmax(0,1fr);}
+  .solar-card-art {min-height:100px;max-height:145px;overflow:hidden;}
+  .solar-card-art img {max-height:145px;width:auto;max-width:100%;}
+  .solar-card-copy {padding:12px 16px 18px;}
+  .solar-planet-art img {width:52%;max-height:none;}
+  .q-options#quiz-levels {grid-template-columns:1fr;}
+  .q-options#quiz-levels button {text-align:left;padding:9px 12px;}
+  .q-options#quiz-levels button small {display:inline;margin-left:8px;}
+  .q-mission-art {grid-template-columns:minmax(0,1fr);}
+  .q-orbit {width:100px;}
+  .planet-comparison th,.planet-comparison td {padding:9px 5px;}
+}
+/* Keep controls and notes outside the actual touch/3D area on small screens. */
+@media (max-width:760px), (max-height:500px) and (max-width:1100px) {
+  .gallery-modal,.object-modal {width:calc(100% - 12px);max-width:none;max-height:calc(100dvh - 12px);overflow-x:hidden;}
+  .modal-inner,.object-modal-inner {padding:8px;}
+  .modal-top,.object-modal-top {gap:8px;padding:4px 3px 8px;}
+  .object-modal-top>span {min-width:0;overflow-wrap:anywhere;letter-spacing:.06em;}
+  .modal-close {min-height:44px;padding:8px 10px;}
+  .modal-toolbar {gap:8px;padding:0 0 8px;}
+  .modal-mode-switch {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;}
+  .modal-tool-group {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;}
+  .modal-tool-group .modal-tool-button-text {grid-column:span 2;}
+  .modal-tool-button,.modal-mode-button {min-width:0;min-height:44px;line-height:1.25;padding:7px 6px;overflow-wrap:anywhere;white-space:normal;}
+  #gallery-viewport {display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr) auto auto;min-height:0;overflow:hidden;align-items:stretch;}
+  #gallery-viewport .gallery-stage {grid-column:1;grid-row:3;min-width:0;min-height:0;height:clamp(220px,52dvh,480px);}
+  #gallery-viewport .gallery-quality-panel {position:static;grid-row:2;grid-column:1;max-width:100%;margin:6px;display:flex;justify-content:space-between;gap:5px;font-size:12px;}
+  #gallery-quality-panel label {flex:1 1 90px;}
+  #gallery-quality-panel select,#gallery-auto {min-height:44px;font-size:13px;max-width:100%;}
+  #gallery-quality-resolution {flex:1 1 90px;overflow-wrap:anywhere;}
+  #gallery-viewport :is(.gallery-inline-note,.gallery-3d-note) {position:static;grid-column:1;grid-row:4;max-width:none;margin:5px 6px 6px;padding:8px;line-height:1.45;backdrop-filter:none;font-size:12px;pointer-events:none;}
+  #gallery-viewport .gallery-3d-note span,#gallery-viewport .gallery-3d-note strong {font-size:12px;}
+  #gallery-viewport #gallery-modal-fallback {grid-row:5;}
+  #gallery-viewport .modal-arrow {grid-column:1;grid-row:3;position:relative;inset:auto;align-self:center;transform:none;width:44px;height:48px;margin:0 4px;}
+  #gallery-viewport #gallery-prev {justify-self:start;}
+  #gallery-viewport #gallery-next {justify-self:end;}
+  #gallery-viewport .gallery-fullscreen-controls {position:static;grid-column:1;grid-row:1;flex-wrap:wrap;padding:5px;}
+  #gallery-viewport .gallery-fullscreen-controls button {flex:1 1 100px;}
+  #gallery-viewport:is(:fullscreen,.is-gallery-expanded) {height:100%;width:100%;}
+  #gallery-viewport:is(:fullscreen,.is-gallery-expanded) .gallery-stage {height:100%;min-height:0;}
+  #gallery-viewport:is(:fullscreen,.is-gallery-expanded) .gallery-3d-note :is(span),#gallery-viewport:is(:fullscreen,.is-gallery-expanded) #gallery-photo-hint {display:none;}
+  #gallery-viewport .gallery-modal-image {max-height:none;}
+  .modal-footer {overflow-wrap:anywhere;}
+  .object-modal-hero,.object-modal-detail {grid-template-columns:minmax(0,1fr);gap:14px;}
+  .object-modal-stage-wrap {padding:10px;min-height:0;min-width:0;}
+  .object-modal-canvas {height:auto;aspect-ratio:1;max-height:none;}
+  .object-modal-controls {display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:5px;}
+  .object-modal-controls button {min-height:44px;padding:7px 4px;line-height:1.2;overflow-wrap:anywhere;}
+  .object-modal-stage-hint {padding:8px;font-size:13px;}
+  .object-modal-copy,.object-modal-stat,.object-modal-detail-stats div,.object-example-card {min-width:0;overflow-wrap:anywhere;}
+  .object-modal-example-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+  .object-modal-examples,.object-modal-detail {padding:12px;}
+  .object-example-card {padding:10px;}
+  .object-example-tag {top:5px;left:5px;right:5px;max-width:fit-content;white-space:normal;font-size:10px;padding:3px 5px;}
+  .object-example-card strong {font-size:15px;}
+  .object-example-card p {font-size:13px;}
+}
+@media(max-width:360px){.object-modal-example-grid{grid-template-columns:minmax(0,1fr);}.object-modal-stat-value{font-size:21px;}}
+@media (orientation:landscape) and (max-height:500px) {
+  .site-header .header-inner {padding-block:5px;min-height:54px;}
+  .navigation.is-open {max-height: max(80px,calc(100dvh - var(--header-offset)));}
+  #gallery-viewport .gallery-stage {height:clamp(180px,67dvh,320px);}
+  #gallery-viewport:is(:fullscreen,.is-gallery-expanded) .gallery-stage {height:100%;}
+  #gallery-viewport .gallery-quality-panel {padding:3px 6px;margin:3px;}
+  #gallery-viewport .gallery-fullscreen-controls {padding:3px;}
+  .modal-toolbar {flex-direction:row;}
+  .modal-mode-switch {flex:1 1 180px;}
+  .modal-tool-group {flex:2 1 280px;grid-template-columns:repeat(4,minmax(0,1fr));}
+  .object-modal-canvas {width:min(100%,300px);align-self:center;}
+}
+@media(max-width:500px){.site-header:has(.language-switch:not([hidden])) .navigation.is-open{max-height:max(80px,calc(100dvh - var(--header-offset) - 4px));}}
+/* Prioritise the image over secondary settings in the normal mobile viewer. */
+@media (max-width:760px), (max-height:500px) and (max-width:1100px) {
+  #gallery-viewport:not(:fullscreen):not(.is-gallery-expanded) .gallery-stage,
+  #gallery-viewport:not(:fullscreen):not(.is-gallery-expanded) .modal-arrow {grid-row:2;}
+  #gallery-viewport:not(:fullscreen):not(.is-gallery-expanded) .gallery-quality-panel {grid-row:3;}
+  #gallery-viewport:not(:fullscreen):not(.is-gallery-expanded) {grid-template-rows:auto minmax(0,1fr) auto auto auto;}
+}
+/* Match keyboard order to visual order on the two-row phone header. */
+@media(max-width:389px){
+  .header-inner:has(.language-switch:not([hidden])) .theme-toggle {grid-row:1;}
+  .header-inner:has(.language-switch:not([hidden])) .menu-toggle {grid-row:2;}
+}
+/* In landscape fullscreen keep the simulation label, but prioritise the scene;
+   the complete help remains immediately available in the normal viewer. */
+@media (orientation:landscape) and (max-height:500px){
+  #gallery-viewport:is(:fullscreen,.is-gallery-expanded) #gallery-3d-note span {display:none!important;}
+}
+@media (orientation:landscape) and (max-height:500px){
+  #gallery-viewport:is(:fullscreen,.is-gallery-expanded) #gallery-3d-note {margin:2px 5px;padding:3px 6px;line-height:1.2;font-size:11px;}
+  #gallery-viewport:is(:fullscreen,.is-gallery-expanded) #gallery-3d-note strong {font-size:11px;margin:0;}
+}

@@ -1,0 +1,114 @@
+/* Vizuálne efekty – samostatná vrstva, ktorá nemení obsah ani logiku stránky. */
+.hero { position: relative; isolation: isolate; }
+.hero-art { width: 100%; }
+.orbit-model {
+  position: relative;
+  width: min(100%, 480px);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffc86b18, #5579db0d 40%, transparent 70%);
+}
+.orbit-model::before {
+  content: "";
+  position: absolute;
+  inset: 5%;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 45%, #8da9ff09 70%);
+}
+.orbit-sun {
+  position: absolute;
+  inset: 45%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #fff7cd, #ffd071 30%, #ff9d35 64%, #cf4d16);
+  box-shadow: 0 0 18px #ffc46dbb, 0 0 45px #f8a24850, 0 0 90px #ffc46d24;
+  animation: sun-glow 5s ease-in-out infinite alternate;
+}
+.orbit-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: var(--orbit-size);
+  aspect-ratio: 1;
+  border: 1px solid #8da9ff35;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(var(--phase));
+  animation: orbit-spin var(--orbit-time) linear infinite;
+}
+.hero-art .orbit-planet {
+  position: absolute;
+  top: 0; left: 50%;
+  width: var(--planet-size);
+  max-width: none;
+  height: auto;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 5px #9eb8ff55);
+}
+.orbit-heading { text-align: center; margin: 0; color: var(--accent-bright); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.orbit-note { max-width: 44ch; margin: 0 auto; text-align: center; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.motion-toggle { min-height: 44px; border: 1px solid var(--control-border); border-radius: var(--button-radius); background: var(--control-bg); color: var(--control-text); padding: 8px 14px; font-size: 13px; }
+.motion-toggle:disabled { cursor: default; max-width: 100%; text-align: left; }
+[data-theme="light"] .orbit-ring { border-color: #5573b34d; }
+[data-theme="light"] .orbit-model { background: radial-gradient(circle, #ffc86b30, #5579db0e 40%, transparent 70%); }
+[data-theme="light"] .orbit-heading { color: #35559b; }
+@keyframes orbit-spin { to { transform: translate(-50%, -50%) rotate(calc(var(--phase) + 360deg)); } }
+@keyframes sun-glow { to { box-shadow: 0 0 24px #ffc46ddd, 0 0 55px #f8a24860, 0 0 100px #ffc46d30; } }
+@keyframes section-appear { from { opacity: .72; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+/* Obsah sa nikdy neschováva pred načítaním JS. Animuje sa až pri vstupe. */
+@media (prefers-reduced-motion: no-preference) {
+.motion-enabled .reveal-in { animation: section-appear .55s ease-out both; }
+.motion-enabled body, .motion-enabled .site-header, .motion-enabled .section,
+.motion-enabled .info-card, .motion-enabled .planet-card, .motion-enabled .quiz-box,
+.motion-enabled .gallery-item, .motion-enabled .site-footer {
+  transition: background-color .28s ease, color .28s ease, border-color .28s ease, box-shadow .24s ease, transform .24s ease;
+}
+.motion-enabled .primary-button, .motion-enabled .secondary-button, .motion-enabled .theme-toggle,
+.motion-enabled .language-switch button, .motion-enabled .answer-button, .motion-enabled .motion-toggle {
+  transition: background-color .24s ease, color .24s ease, border-color .24s ease, transform .2s ease, box-shadow .2s ease;
+}
+.motion-enabled .planet-card img, .motion-enabled .gallery-open img {
+  transition: transform .35s ease, filter .35s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .motion-enabled .planet-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px #5279d52b; }
+  .motion-enabled .planet-card.active:hover { box-shadow: inset 0 0 0 2px var(--selected-border), 0 10px 25px #5279d52b; }
+  .motion-enabled .planet-card:hover img { transform: scale(1.08) rotate(-4deg); filter: drop-shadow(0 0 12px #8da9ff55); }
+  .motion-enabled .primary-button:hover, .motion-enabled .secondary-button:hover, .motion-enabled .motion-toggle:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px #5279d53b; }
+  .motion-enabled .gallery-open:hover img { transform: scale(1.055); }
+  .motion-enabled .gallery-item:hover { border-color: var(--accent); box-shadow: 0 8px 25px #5279d524; }
+}
+/* Moderné prehliadače animujú aj zatvorenie natívneho dialógu; staršie ho zavrú okamžite. */
+@supports (transition-behavior: allow-discrete) {
+  .motion-enabled .gallery-modal { opacity: 0; transform: translateY(8px) scale(.985); transition: opacity .2s ease, transform .2s ease, display .2s allow-discrete, overlay .2s allow-discrete; }
+  .motion-enabled .gallery-modal[open] { opacity: 1; transform: none; }
+  .motion-enabled .gallery-modal::backdrop { opacity: 0; transition: opacity .2s ease, display .2s allow-discrete, overlay .2s allow-discrete; }
+  .motion-enabled .gallery-modal[open]::backdrop { opacity: 1; }
+  @starting-style {
+    .motion-enabled .gallery-modal[open] { opacity: 0; transform: translateY(8px) scale(.985); }
+    .motion-enabled .gallery-modal[open]::backdrop { opacity: 0; }
+  }
+}
+}
+/* Pri pauze či systémovom obmedzení pohybu zostane model statický. */
+html:not(.motion-enabled) .orbit-ring,
+html:not(.motion-enabled) .orbit-sun { animation-play-state: paused; }
+html:not(.motion-enabled) { scroll-behavior: auto; }
+html:not(.motion-enabled) #quiz-progress-bar { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .orbit-ring, .orbit-sun { animation: none !important; }
+  .motion-enabled .reveal-in { animation: none !important; }
+}
+@media (max-width: 640px) {
+  .orbit-model { width: min(100%, 390px); }
+  .orbit-note { font-size: 11px; }
+}
+.orbit-offscreen .orbit-ring, .orbit-offscreen .orbit-sun { animation-play-state: paused; }
+
+/* Nenápadná informácia o mierke: natívne details funguje dotykom aj klávesnicou. */
+.orbit-info { position: absolute; top: 8px; right: 4px; z-index: 3; }
+.orbit-info summary { display: grid; place-items: center; width: 44px; height: 44px; color: var(--muted); font-size: 21px; cursor: pointer; list-style: none; border-radius: 50%; }
+.orbit-info summary::-webkit-details-marker { display: none; }
+.orbit-info summary:hover, .orbit-info[open] summary { color: var(--accent); background: var(--control-bg); }
+.orbit-info summary:focus-visible { outline: 3px solid var(--focus); }
+.orbit-info p { position: absolute; top: 45px; right: 0; width: min(260px, 72vw); margin: 0; padding: 12px 15px; color: var(--text); background: var(--card); border: 1px solid var(--control-border); border-radius: 10px; box-shadow: 0 8px 25px #0003; font-size: 13px; line-height: 1.5; }
+.orbit-heading { padding-inline: 44px; }

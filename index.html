@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jednoduchý sprievodca Slnečnou sústavou. Spoznaj osem planét, zaujímavosti a otestuj svoje vedomosti.">
+  <title>Sprievodca vesmírom</title>
+  <!-- Nastavenie témy ešte pred vykreslením stránky zabraňuje bliknutiu farieb. -->
+  <script>
+    try {
+      if (localStorage.getItem("vesmir-farebny-rezim") === "light") {
+        document.documentElement.dataset.theme = "light";
+      }
+    } catch (error) {
+      // Ak prehliadač blokuje localStorage, predvolená téma zostane tmavá.
+    }
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <link rel="stylesheet" href="planet-viewer.css">
+  <link rel="stylesheet" href="solar-system.css">
+  <link rel="stylesheet" href="quiz.css">
+  <link rel="stylesheet" href="space-background.css">
+  <link rel="stylesheet" href="design-refinement.css">
+  <link rel="stylesheet" href="glass-surfaces.css">
+  <link rel="stylesheet" href="responsive-audit.css">
+  <script src="translations.js" defer></script>
+  <script src="gallery-volume-gl.js?v=2" defer></script>
+  <script src="gallery-scenes.js?v=2" defer></script>
+  <script src="script.js" defer></script>
+  <script src="quiz-data.js" defer></script>
+  <script src="quiz.js" defer></script>
+  <script src="object-textures.js" defer></script>
+  <script src="object-renderer.js" defer></script>
+  <script src="solar-objects.js" defer></script>
+  <script src="animations.js" defer></script>
+  <script src="space-background.js" defer></script>
+  <script src="planet-textures.js" defer></script>
+  <script src="planet-maps.js" defer></script>
+  <script src="planet-maps-local.js" defer></script>
+  <script src="planet-renderer.js" defer></script>
+  <script src="planet-viewer.js" defer></script>
+  <script src="design-refinement.js" defer></script>
+</head>
+<body>
+  <div class="space-background" aria-hidden="true">
+    <div class="space-dust space-dust-far"></div>
+    <div class="space-dust space-dust-near"></div>
+    <canvas id="starfield"></canvas>
+  </div>
+  <a class="skip-link" href="#obsah">Prejsť na obsah</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#uvod" class="logo" aria-label="Sprievodca vesmírom – úvod">
+        <span class="logo-symbol" aria-hidden="true">✦</span> VESMÍR
+      </a>
+      <nav class="navigation" id="site-navigation" aria-label="Hlavná navigácia">
+        <a href="#uvod">Úvod</a>
+        <a href="#o-vesmire">Atlas</a>
+        <a href="#planety">Planéty</a>
+        <a href="#zaujimavosti">Zaujímavosti</a>
+        <a href="#porovnanie">Porovnanie</a>
+        <a href="#galeria">Galéria</a>
+        <a href="#kviz">Kvíz</a>
+        <a href="#o-projekte">O projekte</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Zapnúť svetlý režim" title="Zapnúť svetlý režim">
+          <span class="theme-toggle-icon" aria-hidden="true">☀</span>
+          <span class="theme-toggle-text">Svetlý režim</span>
+        </button>
+        <div class="language-switch" role="group" aria-label="Jazyk" hidden>
+          <button type="button" id="about-language-target" data-language="sk" lang="sk" aria-label="Slovenčina" aria-pressed="true">SK</button>
+          <button type="button" data-language="en" lang="en" aria-label="English" aria-pressed="false">EN</button>
+          <button type="button" data-language="uk" lang="uk" aria-label="Українська" aria-pressed="false">UA</button>
+        </div>
+        <button type="button" class="menu-toggle" id="menu-toggle" aria-controls="site-navigation" aria-expanded="false" aria-label="Otvoriť navigáciu">
+          <span class="menu-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="menu-text">Menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="obsah">
+    <section id="uvod" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+
+          <h1>Vesmír je bližšie,<br><span>než si myslíš.</span></h1>
+          <p class="hero-description">Spoznaj Slnečnú sústavu, objav všetkých osem planét a otestuj svoje vedomosti v krátkom kvíze.</p>
+          <div class="hero-actions">
+            <a class="primary-button" href="#planety">Objaviť planéty <span aria-hidden="true">→</span></a>
+            <button class="motion-toggle" id="motion-toggle" type="button" aria-pressed="false" hidden>Pozastaviť animácie</button>
+          </div>
+        </div>
+        <div class="hero-art">
+          <img src="assets/slnecna-sustava.svg" alt="Ilustrácia Slnka a ôsmich planét Slnečnej sústavy" width="720" height="520">
+        </div>
+      </div>
+    </section>
+
+    <section id="o-vesmire" class="section intro-section">
+      <div class="container">
+
+        <h2>Čo je Slnečná sústava?</h2>
+        <p class="section-description">Slnečnú sústavu tvorí <strong>Slnko</strong> a všetky telesá, ktoré obiehajú <em>okolo neho</em>. Patria sem planéty, trpasličie planéty, mesiace, asteroidy aj kométy.</p>
+        <div class="info-grid solar-overview">
+          <article class="info-card solar-feature">
+            <div class="solar-card-art solar-sun-art"><img data-planet-preview="slnko" src="assets/slnko-detail.webp" alt="" width="400" height="400"></div>
+            <div class="solar-card-copy"><span class="solar-stat">99,8 % hmotnosti sústavy</span><h3>Naša hviezda</h3><p>Slnko drží svojou gravitáciou celú sústavu pohromade. V jadre sa uvoľňuje energia jadrovou fúziou.</p><a class="secondary-button solar-sun-link" href="#sun-detail" data-open-object="slnko">Preskúmať Slnko <span aria-hidden="true">→</span></a></div>
+          </article>
+          <article class="info-card solar-feature solar-planets">
+            <div class="solar-card-art solar-planet-art"><img data-planet-preview="zem" src="assets/zem-detail.webp" alt="" width="400" height="400"><img data-planet-preview="jupiter" src="assets/jupiter-detail.webp" alt="" width="400" height="400"><img data-planet-preview="saturn" src="assets/saturn-detail.webp" alt="" width="400" height="400"></div>
+            <div class="solar-card-copy"><span class="solar-stat">4 kamenné + 4 obrie</span><h3>8 planét</h3><p>Štyri vnútorné kamenné planéty a štyri vonkajšie obrie planéty.</p><a class="secondary-button" href="#planety">Objaviť planéty <span aria-hidden="true">→</span></a></div>
+          </article>
+          <article class="info-card solar-small solar-small-interactive" data-space-category="moons" tabindex="0" role="button" aria-haspopup="dialog" aria-controls="object-modal"><div class="solar-card-art"><img src="assets/objects/moon.webp" alt="" width="400" height="400"></div><div class="solar-card-copy"><span class="solar-stat">Prirodzené satelity</span><h3>Mesiace</h3><p>Od nášho Mesiaca po ľadové svety pri obrovských planétach.</p><span class="solar-card-cta">Preskúmať kategóriu <span aria-hidden="true">→</span></span></div></article>
+          <article class="info-card solar-small solar-small-interactive" data-space-category="dwarfs" tabindex="0" role="button" aria-haspopup="dialog" aria-controls="object-modal"><div class="solar-card-art"><img src="assets/objects/pluto.webp" alt="" width="400" height="400"></div><div class="solar-card-copy"><span class="solar-stat">Pluto, Ceres a ďalšie</span><h3>Trpasličie planéty</h3><p>Obiehajú Slnko a majú približne guľový tvar, ale nevyčistili okolie svojej dráhy.</p><span class="solar-card-cta">Preskúmať kategóriu <span aria-hidden="true">→</span></span></div></article>
+          <article class="info-card solar-small solar-small-interactive" data-space-category="asteroids" tabindex="0" role="button" aria-haspopup="dialog" aria-controls="object-modal"><div class="solar-card-art"><img src="assets/objects/bennu.webp" alt="" width="400" height="400"></div><div class="solar-card-copy"><span class="solar-stat">Kamenné a kovové telesá</span><h3>Asteroidy</h3><p>Veľa asteroidov obieha medzi Marsom a Jupiterom v hlavnom páse asteroidov.</p><span class="solar-card-cta">Preskúmať kategóriu <span aria-hidden="true">→</span></span></div></article>
+          <article class="info-card solar-small solar-small-interactive" data-space-category="comets" tabindex="0" role="button" aria-haspopup="dialog" aria-controls="object-modal"><div class="solar-card-art"><img src="assets/objects/halebopp.webp" alt="" width="400" height="400"></div><div class="solar-card-copy"><span class="solar-stat">Ľad, prach a plyn</span><h3>Kométy</h3><p>Pri priblížení k Slnku sa z ľadu uvoľňuje plyn a prach, ktoré vytvárajú komu a chvosty.</p><span class="solar-card-cta">Preskúmať kategóriu <span aria-hidden="true">→</span></span></div></article>
+        </div>
+        <p class="solar-overview-note">Ilustračné vizualizácie telies, nie v spoločnej mierke.</p>
+      </div>
+    </section>
+
+    <section id="planety" class="section planets-section">
+      <div class="container">
+
+        <div class="section-heading-row">
+          <div>
+            <h2>Planéty Slnečnej sústavy</h2>
+            <p class="section-description">Klikni na planétu a zobrazia sa o nej ďalšie informácie.</p>
+          </div>
+
+        </div>
+
+        <div class="solar-detail-shortcut"><a href="#sun-detail" data-open-object="slnko">☀ <span>Zobraziť Slnko</span></a></div>
+        <div class="planet-grid" role="group" aria-label="Vyber si planétu">
+          <button class="planet-card" type="button" data-planet="merkur" aria-controls="planet-detail" aria-pressed="false">
+            <span class="planet-selected-mark" aria-hidden="true">✓</span>
+            <img src="assets/merkur-detail.webp" alt="Ilustrácia Merkúra" width="400" height="400">
+            <strong>Merkúr</strong><span>1. planéta</span>
+          </button>
+          <button class="planet-card" type="button" data-planet="venusa" aria-controls="planet-detail" aria-pressed="false">
+            <span class="planet-selected-mark" aria-hidden="true">✓</span>
+            <img src="assets/venusa-detail.webp" alt="Ilustrácia Venuše" width="400" height="400">
+            <strong>Venuša</strong><span>2. planéta</span>
+          </button>
+          <button class="planet-card active" type="button" data-planet="zem" aria-controls="planet-detail" aria-pressed="true">
+            <span class="planet-selected-mark" aria-hidden="true">✓</span>
+            <img src="assets/zem-detail.webp" alt="Ilustrácia Zeme" width="400" height="400">
+            <strong>Zem</strong><span>3. planéta</span>
+          </button>
+          <button class="planet-card" type="button" data-planet="mars" aria-controls="planet-detail" aria-pressed="false">
+            <span class="planet-selected-mark" aria-hidden="true">✓</span>
+            <img src="assets/mars-detail.webp" alt="Ilustrácia Marsu" width="400" height="400">
+            <strong>Mars</strong><span>4. planéta</span>
+          </button>
+          <button class="planet-card" type="button" data-planet="jupiter" aria-controls="planet-detail" aria-pressed="false">
+            <span class="planet-selected-mark" aria-hidden="true">✓</span>
+            <img src="assets/jupiter-detail.webp" alt="Ilustrácia Jupitera" width="400" height="400">
+            <strong>Jupiter</strong><span>5. planéta</span>
+          </button>
+          <button class="planet-card" type="button" data-planet="saturn" aria-controls="planet-detail" aria-pressed="false">
+            <span class="planet-selected-mark" aria-hidden="true">✓</span>
+            <img src="assets/saturn-detail.webp" alt="Ilustrácia Saturna" width="400" height="400">
+            <strong>Saturn</strong><span>6. planéta</span>
+          </button>
+          <button class="planet-card" type="button" data-planet="uran" aria-controls="planet-detail" aria-pressed="false">
+            <span class="planet-selected-mark" aria-hidden="true">✓</span>
+            <img src="assets/uran-detail.webp" alt="Ilustrácia Uránu" width="400" height="400">
+            <strong>Urán</strong><span>7. planéta</span>
+          </button>
+          <button class="planet-card" type="button" data-planet="neptun" aria-controls="planet-detail" aria-pressed="false">
+            <span class="planet-selected-mark" aria-hidden="true">✓</span>
+            <img src="assets/neptun-detail.webp" alt="Ilustrácia Neptúna" width="400" height="400">
+            <strong>Neptún</strong><span>8. planéta</span>
+          </button>
+        </div>
+
+        <article id="planet-detail" class="planet-detail" aria-labelledby="detail-name">
+          <div class="detail-image">
+            <img id="detail-img" src="assets/zem-detail.webp" alt="Ilustrácia Zeme" width="290" height="290">
+            <div class="planet-viewer" id="planet-viewer" hidden>
+              <div class="planet-viewer-stage">
+                <span class="planet-viewer-label" aria-hidden="true">3D</span>
+                <canvas id="planet-canvas" tabindex="0" role="img" aria-label="Interaktívny 3D model planéty" aria-describedby="planet-viewer-help"></canvas>
+              </div>
+              <div class="planet-viewer-controls" role="group" aria-label="Ovládanie 3D modelu">
+                <button type="button" id="planet-zoom-out" aria-label="Oddialiť model" title="Oddialiť model">−</button>
+                <button type="button" id="planet-reset">Obnoviť pohľad</button>
+                <button type="button" id="planet-zoom-in" aria-label="Priblížiť model" title="Priblížiť model">+</button>
+              </div>
+              <p id="planet-viewer-help">Potiahni pre otáčanie. Koliesko alebo dva prsty pre zoom. Klávesnica: šípky, + a −.</p>
+              <p class="planet-viewer-note" id="planet-texture-status" aria-live="polite"></p>
+              <p class="planet-viewer-note" id="planet-texture-credit" hidden><a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener noreferrer">Solar System Scope</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p>
+            </div>
+          </div>
+          <div class="detail-copy" aria-live="polite" aria-atomic="true">
+            <p class="section-label">VYBRANÁ PLANÉTA</p>
+            <h3 id="detail-name" tabindex="-1">Zem</h3>
+            <p id="detail-text">Zem je naša domovská planéta a jediné známe miesto s potvrdeným životom. Má atmosféru a oceány.</p>
+            <dl class="planet-facts">
+              <div><dt>Poradie od Slnka</dt><dd id="detail-order">3.</dd></div>
+              <div><dt>Typ planéty</dt><dd id="detail-type">Kamenná planéta</dd></div>
+              <div><dt>Rovníkový priemer</dt><dd id="detail-diameter">12 756 km</dd></div>
+              <div><dt>Priem. vzdialenosť od Slnka</dt><dd id="detail-distance">149,6 mil. km</dd></div>
+              <div><dt>Dĺžka roka</dt><dd id="detail-year">365,25 dňa</dd></div>
+              <div><dt>Priemerná teplota*</dt><dd id="detail-temperature">+15 °C</dd></div>
+            </dl>
+            <p class="data-note">* Údaje sú približné. Pri obrích planétach je teplota uvedená v atmosfére pri tlaku približne 1 bar (podobne ako pri hladine mora na Zemi), nie na pevnom povrchu. Dĺžka roka je v pozemských dňoch alebo rokoch. Zdroje: <a href="https://science.nasa.gov/solar-system/planets/" target="_blank" rel="noopener noreferrer">NASA – planéty</a>, <a href="https://science.nasa.gov/solar-system/planets/planet-sizes-and-locations-in-our-solar-system/" target="_blank" rel="noopener noreferrer">vzdialenosti</a>, <a href="https://ssd.jpl.nasa.gov/planets/phys_par.html" target="_blank" rel="noopener noreferrer">rozmery a obežné doby</a>, <a href="https://science.nasa.gov/resource/solar-system-temperatures/" target="_blank" rel="noopener noreferrer">teploty</a>.</p>
+            <p class="detail-highlight"><span aria-hidden="true">✦</span> <span id="detail-fact">Voda pokrýva približne 71 % povrchu Zeme.</span></p>
+          </div>
+        </article>
+        <article id="sun-detail" class="planet-detail sun-detail" aria-labelledby="sun-name">
+          <div class="sun-viewer-slot"><img id="sun-static" src="assets/slnko-detail.webp" alt="Ilustrácia Slnka" width="400" height="400"></div>
+          <div class="detail-copy">
+            <h3 id="sun-name" tabindex="-1">Slnko</h3>
+            <p>Slnko je hviezda z horúcej plazmy, zložená najmä z vodíka a hélia. Jeho gravitácia drží Slnečnú sústavu pohromade.</p>
+            <dl class="planet-facts">
+              <div><dt>Typ hviezdy</dt><dd>Hviezda typu G2 V</dd></div>
+              <div><dt>Priemer</dt><dd>1,4 mil. km</dd></div>
+              <div><dt>Vek</dt><dd>4,6 mld. rokov</dd></div>
+              <div><dt>Teplota fotosféry</dt><dd>5 500 °C</dd></div>
+              <div><dt>Teplota jadra</dt><dd>15 mil. °C</dd></div>
+              <div><dt>Rotácia na rovníku</dt><dd>Približne 25 dní</dd></div>
+            </dl>
+            <p class="data-note"><a href="https://science.nasa.gov/sun/facts/" target="_blank" rel="noopener noreferrer">Zdroj údajov: NASA – Slnko</a></p>
+            <p class="detail-highlight">Slnko obsahuje približne 99,8 % hmotnosti Slnečnej sústavy.</p>
+            <p class="detail-highlight">Do objemu Slnka by sa zmestilo približne 1,3 milióna Zemí.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="zaujimavosti" class="section facts-section">
+      <div class="container">
+
+        <h2>Vesmírne zaujímavosti</h2>
+        <p class="section-description">Stlač tlačidlo a objav novú zaujímavosť o vesmíre.</p>
+        <article class="fact-box">
+          <div class="fact-visual" aria-hidden="true">
+            <div class="fact-orbit"></div>
+            <img id="fact-image" data-planet-preview="venusa" src="assets/venusa-detail.webp" alt="" width="400" height="400">
+          </div>
+          <div class="fact-content">
+            <div class="fact-meta"><span id="fact-category">Venuša</span><span id="fact-count">1 / 12</span></div>
+            <h3 id="fact-title">Najhorúcejšia planéta</h3>
+            <p id="random-fact" aria-live="polite">Na Venuši je vyššia priemerná povrchová teplota než na Merkúre, hoci je ďalej od Slnka.</p>
+            <div class="fact-progress" aria-hidden="true"><span id="fact-progress-bar" style="width: 8.3333%"></span></div>
+            <div class="fact-actions">
+              <button class="secondary-button" type="button" id="prev-fact" hidden>Predchádzajúca <span aria-hidden="true">←</span></button>
+              <button class="primary-button" type="button" id="new-fact">Ďalšia zaujímavosť <span aria-hidden="true">↻</span></button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section comparison-section" id="porovnanie">
+      <div class="container">
+
+        <h2>Rýchle porovnanie</h2>
+        <p class="section-description">Porovnaj veľkosť a priemernú vzdialenosť všetkých ôsmich planét od Slnka.</p>
+        <div class="comparison-sort" role="group" aria-label="Triedenie planét" hidden>
+          <button class="secondary-button" type="button" data-sort="diameter-asc" id="sort-asc" aria-pressed="false" aria-controls="planet-comparison">Od najmenšej ↑</button>
+          <button class="secondary-button" type="button" data-sort="diameter-desc" id="sort-desc" aria-pressed="false" aria-controls="planet-comparison">Od najväčšej ↓</button>
+          <button class="secondary-button" type="button" data-sort="distance-asc" id="sort-distance-asc" aria-pressed="false" aria-controls="planet-comparison">Najbližšie k Slnku ↑</button>
+          <button class="secondary-button" type="button" data-sort="distance-desc" id="sort-distance-desc" aria-pressed="false" aria-controls="planet-comparison">Najďalej od Slnka ↓</button>
+          <button class="secondary-button sort-reset" type="button" data-sort="original" id="sort-reset" aria-pressed="true" aria-controls="planet-comparison">Pôvodné poradie</button>
+        </div>
+        <p id="sort-status" aria-live="polite">Pôvodné poradie od Slnka.</p>
+        <div class="table-scroll">
+          <table class="planet-comparison" id="planet-comparison">
+            <caption>Prehľad ôsmich planét Slnečnej sústavy</caption>
+            <thead>
+              <tr>
+                <th scope="col">Planéta</th>
+                <th scope="col" id="diameter-heading" aria-sort="none">Priemer (km)</th>
+                <th scope="col" id="distance-heading">Vzdialenosť od Slnka (mil. km)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="planet-smallest">
+                <th scope="row"><div class="comparison-planet"><img data-planet-preview="merkur" src="assets/merkur-detail.webp" alt="" width="400" height="400"><span class="comparison-name"><span>Merkúr</span><span class="size-label">Najmenšia</span></span></div></th>
+                <td data-diameter="4880"><span class="diameter-value">4 880</span><span class="diameter-track" aria-hidden="true"><span style="width: 3.4130%"></span></span></td>
+                <td data-distance="57.9"><span class="distance-value">57,9</span></td>
+              </tr>
+              <tr>
+                <th scope="row"><div class="comparison-planet"><img data-planet-preview="venusa" src="assets/venusa-detail.webp" alt="" width="400" height="400"><span class="comparison-name"><span>Venuša</span></span></div></th>
+                <td data-diameter="12104"><span class="diameter-value">12 104</span><span class="diameter-track" aria-hidden="true"><span style="width: 8.4653%"></span></span></td>
+                <td data-distance="108.2"><span class="distance-value">108,2</span></td>
+              </tr>
+              <tr>
+                <th scope="row"><div class="comparison-planet"><img data-planet-preview="zem" src="assets/zem-detail.webp" alt="" width="400" height="400"><span class="comparison-name"><span>Zem</span></span></div></th>
+                <td data-diameter="12756"><span class="diameter-value">12 756</span><span class="diameter-track" aria-hidden="true"><span style="width: 8.9213%"></span></span></td>
+                <td data-distance="149.6"><span class="distance-value">149,6</span></td>
+              </tr>
+              <tr>
+                <th scope="row"><div class="comparison-planet"><img data-planet-preview="mars" src="assets/mars-detail.webp" alt="" width="400" height="400"><span class="comparison-name"><span>Mars</span></span></div></th>
+                <td data-diameter="6792"><span class="diameter-value">6 792</span><span class="diameter-track" aria-hidden="true"><span style="width: 4.7502%"></span></span></td>
+                <td data-distance="228"><span class="distance-value">228</span></td>
+              </tr>
+              <tr class="planet-largest">
+                <th scope="row"><div class="comparison-planet"><img data-planet-preview="jupiter" src="assets/jupiter-detail.webp" alt="" width="400" height="400"><span class="comparison-name"><span>Jupiter</span><span class="size-label">Najväčšia</span></span></div></th>
+                <td data-diameter="142984"><span class="diameter-value">142 984</span><span class="diameter-track" aria-hidden="true"><span style="width: 100.0000%"></span></span></td>
+                <td data-distance="778.5"><span class="distance-value">778,5</span></td>
+              </tr>
+              <tr>
+                <th scope="row"><div class="comparison-planet"><img data-planet-preview="saturn" src="assets/saturn-detail.webp" alt="" width="400" height="400"><span class="comparison-name"><span>Saturn</span></span></div></th>
+                <td data-diameter="120536"><span class="diameter-value">120 536</span><span class="diameter-track" aria-hidden="true"><span style="width: 84.3003%"></span></span></td>
+                <td data-distance="1432"><span class="distance-value">1 432</span></td>
+              </tr>
+              <tr>
+                <th scope="row"><div class="comparison-planet"><img data-planet-preview="uran" src="assets/uran-detail.webp" alt="" width="400" height="400"><span class="comparison-name"><span>Urán</span></span></div></th>
+                <td data-diameter="51118"><span class="diameter-value">51 118</span><span class="diameter-track" aria-hidden="true"><span style="width: 35.7509%"></span></span></td>
+                <td data-distance="2867"><span class="distance-value">2 867</span></td>
+              </tr>
+              <tr>
+                <th scope="row"><div class="comparison-planet"><img data-planet-preview="neptun" src="assets/neptun-detail.webp" alt="" width="400" height="400"><span class="comparison-name"><span>Neptún</span></span></div></th>
+                <td data-diameter="49528"><span class="diameter-value">49 528</span><span class="diameter-track" aria-hidden="true"><span style="width: 34.6388%"></span></span></td>
+                <td data-distance="4500"><span class="distance-value">4 500</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="comparison-scale-note"><span aria-hidden="true" class="scale-swatch"></span><span>Dĺžka pásu predstavuje rovníkový priemer v pomere k Jupiteru (100 %).</span></p>
+        <p class="comparison-note">Priemery sú rovníkové a vzdialenosti od Slnka priemerné. Všetky hodnoty sú približné.</p>
+      </div>
+    </section>
+
+    <section id="galeria" class="section gallery-section">
+      <div class="container">
+
+        <div class="section-heading-row">
+          <div>
+            <h2>Fotogaléria vesmíru</h2>
+            <p class="section-description">Skutočné astronomické snímky z teleskopov James Webb a Hubble. Klikni na fotografiu a zobraz ju vo väčšom formáte.</p>
+          </div>
+
+        </div>
+        <div class="gallery-grid">
+          <figure class="gallery-item">
+            <button class="gallery-open" type="button" aria-haspopup="dialog" aria-controls="gallery-modal" aria-label="Zväčšiť fotografiu Kozmické útesy" data-title="Kozmické útesy" data-description="Oblasť zrodu hviezd v hmlovine Carina, pozorovaná teleskopom James Webb." data-credit="NASA, ESA, CSA, STScI" data-source="https://esawebb.org/images/weic2205a/" data-fullres="https://cdn.esawebb.org/archives/images/large/weic2205a.jpg" data-scene="carina">
+              <img src="https://cdn.esawebb.org/archives/images/screen/weic2205a.jpg" data-fallback="assets/galeria-karina.svg" alt="Kozmické útesy v hmlovine Carina" width="640" height="430" loading="lazy">
+              <span class="gallery-fallback" aria-hidden="true">Ilustrácia</span>
+              <span class="gallery-zoom" aria-hidden="true">Zväčšiť ↗</span>
+            </button>
+            <figcaption><strong>Kozmické útesy</strong><span class="gallery-description">Miesto, kde sa v hmlovine Carina rodia nové hviezdy.</span><small>Zdroj: NASA, ESA, CSA, STScI</small></figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <button class="gallery-open" type="button" aria-haspopup="dialog" aria-controls="gallery-modal" aria-label="Zväčšiť fotografiu Stĺpy stvorenia" data-title="Stĺpy stvorenia" data-description="Oblaky prachu a plynu v Orlej hmlovine, kde vznikajú nové hviezdy." data-credit="NASA, ESA, CSA, STScI" data-source="https://esawebb.org/images/weic2218d/" data-fullres="https://cdn.esawebb.org/archives/images/large/weic2218d.jpg" data-scene="pillars">
+              <img src="https://cdn.esawebb.org/archives/images/screen/weic2218d.jpg" data-fallback="assets/galeria-stlpy.svg" alt="Stĺpy stvorenia v Orlej hmlovine" width="640" height="430" loading="lazy">
+              <span class="gallery-fallback" aria-hidden="true">Ilustrácia</span>
+              <span class="gallery-zoom" aria-hidden="true">Zväčšiť ↗</span>
+            </button>
+            <figcaption><strong>Stĺpy stvorenia</strong><span class="gallery-description">Stĺpy plynu a prachu v Orlej hmlovine.</span><small>Zdroj: NASA, ESA, CSA, STScI</small></figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <button class="gallery-open" type="button" aria-haspopup="dialog" aria-controls="gallery-modal" aria-label="Zväčšiť fotografiu Galaxia Cartwheel" data-title="Galaxia Cartwheel" data-description="Nezvyčajná prstencová galaxia zachytená prístrojmi NIRCam a MIRI." data-credit="NASA, ESA, CSA, STScI" data-source="https://esawebb.org/images/weic2211a/" data-fullres="https://cdn.esawebb.org/archives/images/large/weic2211a.jpg" data-scene="cartwheel">
+              <img src="https://cdn.esawebb.org/archives/images/screen/weic2211a.jpg" data-fallback="assets/galeria-galaxia.svg" alt="Prstencová galaxia Cartwheel na tmavom hviezdnom pozadí" width="640" height="430" loading="lazy">
+              <span class="gallery-fallback" aria-hidden="true">Ilustrácia</span>
+              <span class="gallery-zoom" aria-hidden="true">Zväčšiť ↗</span>
+            </button>
+            <figcaption><strong>Galaxia Cartwheel</strong><span class="gallery-description">Nezvyčajná galaxia s výrazným prstencom.</span><small>Zdroj: NASA, ESA, CSA, STScI</small></figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <button class="gallery-open" type="button" aria-haspopup="dialog" aria-controls="gallery-modal" aria-label="Zväčšiť fotografiu Webbovo hlboké pole" data-title="Webbovo hlboké pole" data-description="Pohľad na množstvo vzdialených galaxií v oblasti kopy SMACS 0723." data-credit="NASA, ESA, CSA, STScI" data-source="https://esawebb.org/images/weic2209a/" data-fullres="https://cdn.esawebb.org/archives/images/large/weic2209a.jpg" data-scene="deep-field">
+              <img src="https://cdn.esawebb.org/archives/images/screen/weic2209a.jpg" data-fallback="assets/galeria-hlboke-pole.svg" alt="Tisíce galaxií na hlbokej snímke Webbovho teleskopu" width="640" height="430" loading="lazy">
+              <span class="gallery-fallback" aria-hidden="true">Ilustrácia</span>
+              <span class="gallery-zoom" aria-hidden="true">Zväčšiť ↗</span>
+            </button>
+            <figcaption><strong>Webbovo hlboké pole</strong><span class="gallery-description">Pohľad na množstvo vzdialených galaxií.</span><small>Zdroj: NASA, ESA, CSA, STScI</small></figcaption>
+          </figure>
+        </div>
+        <p class="gallery-note">Fotografie: uvedení autori, ESA/Webb a ESA/Hubble (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>). Fotografie sa načítavajú z internetu; bez pripojenia sa zobrazia náhradné ilustrácie.</p>
+      </div>
+    </section>
+
+    <section id="kviz" class="section quiz-section">
+      <div class="container">
+
+        <h2>Vesmírny kvíz</h2>
+        <p class="section-description" data-q="introText">Vyber si výzvu a otestuj svoje vedomosti o vesmíre.</p>
+        <div class="quiz-box mission-quiz">
+          <div id="quiz-intro" class="quiz-intro">
+            <div class="q-intro-grid">
+              <div class="q-setup">
+                <span class="q-kicker" data-q="mission">VESMÍRNA VÝZVA</span>
+                <h3 data-q="ready">Pripravený na štart?</h3>
+                <p data-q="setupText">60 otázok, tri úrovne a vysvetlenie každej odpovede.</p>
+                <fieldset><legend data-q="difficulty">Obtiažnosť</legend><div class="q-options" id="quiz-levels">
+                  <button type="button" data-level="easy" aria-pressed="true"><span data-q="easy">Ľahká</span><small data-q="easyDesc">Základy</small></button>
+                  <button type="button" data-level="medium" aria-pressed="false"><span data-q="medium">Stredná</span><small data-q="mediumDesc">Prieskumník</small></button>
+                  <button type="button" data-level="hard" aria-pressed="false"><span data-q="hard">Ťažká</span><small data-q="hardDesc">Expert</small></button>
+                </div></fieldset>
+                <fieldset><legend data-q="amount">Počet otázok</legend><div class="q-options" id="quiz-counts">
+                  <button type="button" data-count="5" aria-pressed="true">5</button><button type="button" data-count="10" aria-pressed="false">10</button><button type="button" data-count="15" aria-pressed="false">15</button>
+                </div></fieldset>
+                <button class="primary-button q-start" type="button" id="quiz-start" data-q="start">Spustiť kvíz →</button>
+              </div>
+              <aside class="q-mission-art"><div class="q-orbit" aria-hidden="true"><img src="assets/saturn-detail.webp" alt="" width="400" height="400"></div><div class="q-best"><span data-q="best">Najlepší výsledok</span><strong id="quiz-best">—</strong><small id="quiz-best-detail"></small></div><small data-q="bestNote">Rekord pre zvolenú úroveň a počet otázok.</small></aside>
+            </div>
+          </div>
+          <div id="quiz-play" hidden>
+            <div class="q-game-header"><span id="quiz-game-level" class="q-kicker"></span><button class="secondary-button" id="quiz-exit" type="button" data-q="exit">Nové nastavenie</button></div>
+            <div class="quiz-topline"><span id="quiz-progress"></span><span id="quiz-score"></span></div>
+            <div class="quiz-progress-track" role="progressbar" aria-label="Priebeh kvízu" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" id="quiz-progress-track"><div id="quiz-progress-bar"></div></div>
+            <div class="q-steps" id="quiz-steps" aria-hidden="true"></div>
+            <div id="quiz-question-panel" class="q-question-panel">
+              <figure id="quiz-visual" class="q-visual" hidden><img id="quiz-image" alt="" width="400" height="400"><figcaption id="quiz-image-credit"></figcaption></figure>
+              <div class="q-question-main"><h3 id="quiz-question" tabindex="-1"></h3><div class="quiz-answers" id="quiz-answers"></div></div>
+            </div>
+            <div id="quiz-feedback" class="quiz-feedback" aria-live="polite" role="status" hidden></div>
+            <button class="primary-button quiz-next" type="button" id="quiz-next" hidden></button>
+          </div>
+          <div class="quiz-result-screen" id="quiz-result-screen" hidden>
+            <div class="q-result-grid"><div class="q-result-orbit" id="quiz-result-orbit"><strong id="quiz-percent"></strong><span data-q="accuracy">Úspešnosť</span></div><div><span class="q-kicker" data-q="complete">MISIA DOKONČENÁ</span><h3 id="quiz-result-heading" tabindex="-1"></h3><p id="quiz-result-feedback"></p><p id="quiz-record" class="q-record" hidden></p><div class="q-result-stats"><div><span data-q="correctCount">Správne</span><strong id="quiz-result-text"></strong></div><div><span data-q="wrongCount">Nesprávne</span><strong id="quiz-result-incorrect"></strong></div></div></div></div>
+            <div class="q-result-actions"><button class="primary-button" type="button" id="quiz-restart" data-q="restart">Zopakovať kvíz ↻</button><button class="secondary-button" type="button" id="quiz-settings" data-q="settings">Zmeniť nastavenia</button><button class="secondary-button" type="button" id="quiz-review-toggle" aria-controls="quiz-review" aria-expanded="false" data-q="review">Pozrieť chyby</button></div>
+            <div id="quiz-review" hidden><h4 data-q="reviewTitle">Prehľad nesprávnych odpovedí</h4><div id="quiz-review-list"></div></div>
+          </div>
+          <p class="q-sources"><span data-q="sources">Zdroje otázok:</span> <a href="https://science.nasa.gov/solar-system/" target="_blank" rel="noopener noreferrer">NASA Solar System</a> · <a href="https://science.nasa.gov/universe/" target="_blank" rel="noopener noreferrer">NASA Universe</a> · <a href="https://science.nasa.gov/exoplanets/" target="_blank" rel="noopener noreferrer">NASA Exoplanets</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="o-projekte" class="section about-section" aria-labelledby="about-title">
+      <div class="container">
+        <div class="about-intro">
+          <div><h2 id="about-title">O projekte</h2><p>Sprievodca vesmírom je vzdelávacia webová stránka vytvorená pre predmet Technológie internetu. Spája astronomické informácie, interaktívne modely a vedomostnú hru.</p><span class="about-time"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="12" rx="10" ry="5" transform="rotate(-35 12 12)"/><circle cx="12" cy="12" r="3"/><circle cx="19" cy="5" r="1.5" fill="currentColor" stroke="none"/></svg> Rýchly sprievodca · 2–3 minúty</span></div>
+          <div class="about-stats"><div><strong>9</strong><span>modelov Slnka a planét</span></div><div><strong>15</strong><span>ďalších telies</span></div><div><strong>4</strong><span>3D scén galérie</span></div><div><strong>60</strong><span>kvízových otázok</span></div></div></div>
+        <h3 class="about-subtitle">Čo si môžeš vyskúšať</h3>
+        <div class="about-grid">
+          <article class="about-card"><div class="about-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="12" rx="10" ry="5" transform="rotate(-35 12 12)"/><circle cx="12" cy="12" r="3"/><circle cx="19" cy="5" r="1.5" fill="currentColor" stroke="none"/></svg></div><h4>Interaktívna Slnečná sústava</h4><p>Klikni na pohybujúcu sa planétu alebo Slnko. Otvorí sa detail vybraného telesa.</p><a class="about-link" href="#uvod"><span>Vyskúšať obežný model</span><span aria-hidden="true">→</span></a></article>
+          <article class="about-card"><div class="about-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 7h14M5 17h14"/></svg></div><h4>3D modely planét</h4><p>Vyber planétu, otáčaj model potiahnutím a približuj kolieskom alebo dvoma prstami.</p><a class="about-link" href="#planety"><span>Preskúmať modely planét</span><span aria-hidden="true">→</span></a></article>
+          <article class="about-card"><div class="about-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z"/><path d="M17 3v6m-3-3h6"/></svg></div><h4>Ďalšie vesmírne telesá</h4><p>Otvor kartu mesiacov, trpasličích planét, asteroidov alebo komét. Vyber jeden z 15 objektov.</p><a class="about-link" href="#o-vesmire"><span>Otvoriť atlas telies</span><span aria-hidden="true">→</span></a></article>
+          <article class="about-card"><div class="about-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2Z"/></svg></div><h4>Generátor zaujímavostí</h4><p>Stlač „Ďalšia zaujímavosť“. Najprv objavíš 12 rôznych faktov; môžeš sa aj vrátiť k predošlým.</p><a class="about-link" href="#zaujimavosti"><span>Objaviť zaujímavosti</span><span aria-hidden="true">→</span></a></article>
+          <article class="about-card"><div class="about-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18M5 16V9m7 7V4m7 12V7"/><path d="M3 16h4m3 0h4m3 0h4"/></svg></div><h4>Porovnávanie planét</h4><p>Zoraď tabuľku podľa priemeru alebo vzdialenosti od Slnka. Porovnaj veľkosti a obnov pôvodné poradie.</p><a class="about-link" href="#porovnanie"><span>Vyskúšať triedenie</span><span aria-hidden="true">→</span></a></article>
+          <article class="about-card"><div class="about-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="2"/><path d="m3 17 5-5 4 4 4-6 5 7"/></svg></div><h4>Fotogaléria a 3D skúmanie</h4><p>Otvor jednu zo 4 fotografií. Približuj ju alebo prepni na 3D skúmanie, otáčaj kameru a zmeň grafickú kvalitu.</p><a class="about-link" href="#galeria"><span>Preskúmať fotogalériu</span><span aria-hidden="true">→</span></a></article>
+          <article class="about-card"><div class="about-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8m-6-4h4m-6-4a6 6 0 1 1 8 0l-2 3h-4Z"/><path d="m10 9 1 1 3-3"/></svg></div><h4>Vedomostný kvíz</h4><p>Vyber obtiažnosť a 5, 10 alebo 15 otázok. Spusti hru, čítaj vysvetlenia a skontroluj výsledok aj chyby.</p><a class="about-link" href="#kviz"><span>Vyskúšať kvíz</span><span aria-hidden="true">→</span></a></article>
+          <article class="about-card"><div class="about-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h12M9 3v2M5 5c0 6 5 9 9 11M13 5c0 6-5 9-10 11m11 5 4-10 4 10m-6-4h4"/></svg></div><h4>Tri jazykové verzie</h4><p>V hornej navigácii vyber SK, EN alebo UA. Obsah sa preloží bez obnovenia stránky.</p><a class="about-link" href="#about-language-target"><span>Prejsť k výberu jazyka</span><span aria-hidden="true">→</span></a></article>
+          <article class="about-card"><div class="about-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5m-11 11L5 19"/></svg></div><h4>Svetlý a tmavý režim</h4><p>Klikni na tlačidlo farebného režimu v hlavičke. Stránka si zapamätá zvolenú tému.</p><a class="about-link" href="#theme-toggle"><span>Prejsť k prepínaču témy</span><span aria-hidden="true">→</span></a></article>
+        </div>
+        <h3 class="about-subtitle">Použité technológie</h3>
+        <div class="about-tech-grid">
+          <article class="about-tech"><h4>HTML5</h4><p>Sémantické sekcie, tabuľka, tlačidlá a dialógové okná.</p></article>
+          <article class="about-tech"><h4>CSS3</h4><p>Flexbox, Grid, media queries, animácie a farebné premenné.</p></article>
+          <article class="about-tech"><h4>JavaScript</h4><p>Výber objektov, triedenie, kvíz, preklady a ovládanie kamery.</p></article>
+          <article class="about-tech"><h4>Canvas API</h4><p>Hviezdne pozadie, modely telies a záložné vykresľovanie.</p></article>
+          <article class="about-tech"><h4>WebGL / WebGL2 · GLSL</h4><p>GPU vykresľovanie planét a objemových 3D scén galérie.</p></article>
+          <article class="about-tech"><h4>Web APIs</h4><p>localStorage, Pointer Events, Fullscreen API, IntersectionObserver a requestAnimationFrame.</p></article>
+        </div>
+        <h3 class="about-subtitle">Technické spracovanie</h3>
+        <div class="about-implementation">
+          <article><h4>Statická stránka</h4><p>Samostatné HTML, CSS a JS súbory; bez externého JavaScriptového frameworku, servera či databázy.</p></article>
+          <article><h4>Výkon a prístupnosť</h4><p>Odložené načítavanie objemových dát, adaptívna kvalita galérie, ovládanie dotykom a klávesnicou, obmedzenie animácií.</p></article>
+          <article><h4>Lokálne nastavenia</h4><p>Jazyk, téma, grafická kvalita galérie a rekordy kvízu sa ukladajú v localStorage.</p></article>
+          <article><h4>Zdroje a vizualizácie</h4><p>Astronomické fotografie majú uvedené zdroje. 3D simulácie sú ilustračné; modely nie sú v spoločnej mierke. Externé snímky a mapy vyžadujú internet.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" class="section contact-section">
+      <div class="container">
+        <h2>Kontakt</h2>
+        <p class="section-description">Máš otázku, nápad alebo spätnú väzbu? Ozvi sa mi.</p>
+        <article class="author-card" aria-labelledby="author-name">
+          <div class="author-portrait-panel">
+            <div class="author-portrait-orbit">
+              <img class="author-portrait" src="assets/autor.jpg" width="450" height="450" alt="Fotografia autora stránky" loading="lazy" decoding="async">
+            </div>
+            <span class="author-role">Autor projektu</span>
+          </div>
+          <div class="author-content">
+            <h3 id="author-name">Arsenii Prokhnitskyi</h3>
+            <p class="author-description">Sprievodca vesmírom je školský projekt pre predmet Technológie internetu.</p>
+            <h4 class="author-links-heading">Kde ma nájdeš</h4>
+            <div class="author-links">
+            <a class="author-link author-link--instagram" href="https://www.instagram.com/prh.rsn/?hl=uk" target="_blank" rel="noopener noreferrer">
+              <span class="author-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg></span>
+              <span class="author-link-copy"><strong>Instagram</strong><span>@prh.rsn</span></span>
+              <span class="author-link-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a class="author-link author-link--tiktok" href="https://www.tiktok.com/@prh.rsn" target="_blank" rel="noopener noreferrer">
+              <span class="author-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" focusable="false"><path fill="currentColor" d="M14 2h3.2c.3 2.7 1.9 4.4 4.8 4.8v3.3a9 9 0 0 1-4.8-1.5V16a6.4 6.4 0 1 1-6.4-6.4c.4 0 .8 0 1.2.1v3.4a3.2 3.2 0 1 0 2 3V2Z"/></svg></span>
+              <span class="author-link-copy"><strong>TikTok</strong><span>@prh.rsn</span></span>
+              <span class="author-link-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a class="author-link author-link--github" href="https://github.com/arsenii-prokhnitskyi" target="_blank" rel="noopener noreferrer">
+              <span class="author-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.86c-2.78.6-3.37-1.18-3.37-1.18-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg></span>
+              <span class="author-link-copy"><strong>GitHub</strong><span>arsenii-prokhnitskyi</span></span>
+              <span class="author-link-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a class="author-link author-link--telegram" href="https://t.me/prhrsn" target="_blank" rel="noopener noreferrer">
+              <span class="author-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" focusable="false"><path fill="currentColor" d="M21.7 3.4 2.9 10.7c-1.3.5-1.3 1.2-.2 1.5l4.8 1.5 1.8 5.5c.2.6.1.8.8.8.5 0 .7-.2 1-.5l2.3-2.2 4.9 3.6c.9.5 1.5.2 1.7-.9l3.2-15.2c.3-1.3-.5-1.9-1.5-1.4ZM9.3 13.3l10.1-6.4c.5-.3.9-.1.5.2l-8.3 7.5-.3 3.3-2-4.6Z"/></svg></span>
+              <span class="author-link-copy"><strong>Telegram</strong><span>@prhrsn</span></span>
+              <span class="author-link-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a class="author-link author-link--email" href="mailto:arsenproh25@gmail.com">
+              <span class="author-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" focusable="false"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+              <span class="author-link-copy"><strong>E-mail</strong><span>arsenproh25@gmail.com</span></span>
+              <span class="author-link-arrow" aria-hidden="true">↗</span>
+            </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="object-modal" class="object-modal" aria-labelledby="object-modal-title" aria-describedby="object-modal-description">
+    <div class="object-modal-inner">
+      <div class="object-modal-top">
+        <span id="object-modal-kicker">Kategória vesmírnych telies</span>
+        <button id="object-modal-close" class="modal-close" type="button" aria-label="Zavrieť informačné okno">✕ Zavrieť</button>
+      </div>
+      <div class="object-modal-hero">
+        <div class="object-modal-stage-wrap">
+          <span class="object-modal-stage-label" aria-hidden="true">INTERAKTÍVNY MODEL</span>
+          <canvas id="object-modal-canvas" class="object-modal-canvas" width="720" height="720" tabindex="0" role="img" aria-label="Interaktívna vizualizácia vesmírneho telesa"></canvas>
+          <p id="object-modal-stage-hint" class="object-modal-stage-hint">Potiahni pre otáčanie. Kolieskom alebo dvoma prstami približuj a odďaľuj.</p>
+          <div class="object-modal-controls" role="group" aria-label="Ovládanie modelu">
+            <button id="object-modal-zoom-out" type="button" aria-label="Oddialiť model">−</button>
+            <button id="object-modal-reset" type="button">Obnoviť pohľad</button>
+            <button id="object-modal-zoom-in" type="button" aria-label="Priblížiť model">+</button>
+          </div>
+        </div>
+        <div class="object-modal-copy">
+          <p class="section-label" id="object-modal-eyebrow">Prehľad kategórie</p>
+          <h3 id="object-modal-title">Mesiace</h3>
+          <p id="object-modal-description">Podrobnejšie informácie o vybranej kategórii vesmírnych telies.</p>
+          <div class="object-modal-stats" id="object-modal-stats"></div>
+          <div class="object-modal-facts">
+            <h4 id="object-modal-facts-title">Zaujímavé fakty</h4>
+            <ul id="object-modal-facts-list"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="object-modal-examples">
+        <div class="object-modal-examples-top">
+          <div>
+            <h4 id="object-modal-examples-title">Príklady a zaujímavé objekty</h4>
+            <p id="object-modal-examples-text">Klikni na konkrétny objekt a zobrazia sa jeho základné údaje.</p>
+          </div>
+          <span id="object-modal-selection" class="object-modal-selection-pill">Mesiac</span>
+        </div>
+        <div class="object-modal-example-grid" id="object-modal-example-grid"></div>
+      </div>
+      <div class="object-modal-detail" id="object-modal-detail">
+        <div class="object-modal-detail-text">
+          <p class="section-label" id="object-modal-current-type">Vybraný objekt</p>
+          <h4 id="object-modal-current-name">Mesiac</h4>
+          <p id="object-modal-current-description">Najbližší prirodzený satelit Zeme.</p>
+        </div>
+        <dl class="object-modal-detail-stats" id="object-modal-detail-stats"></dl>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="gallery-modal" class="gallery-modal" aria-labelledby="gallery-modal-title" aria-describedby="gallery-modal-description">
+    <div class="modal-inner">
+      <div class="modal-top"><span id="gallery-modal-counter">1 / 4</span><button id="gallery-close" autofocus class="modal-close" type="button" aria-label="Zavrieť fotografiu">✕ Zavrieť</button></div>
+      <div class="modal-toolbar">
+        <div class="modal-mode-switch" role="group" aria-label="Režim zobrazenia galérie">
+          <button id="gallery-mode-photo" class="modal-mode-button is-active" type="button" aria-pressed="true">Fotografia</button>
+          <button id="gallery-mode-3d" class="modal-mode-button" type="button" aria-pressed="false">3D skúmanie</button>
+        </div>
+        <div class="modal-tool-group">
+          <button id="gallery-zoom-out" class="modal-tool-button" type="button" aria-label="Oddialiť fotografiu">−</button>
+          <button id="gallery-zoom-in" class="modal-tool-button" type="button" aria-label="Priblížiť fotografiu">+</button>
+          <button id="gallery-rotate-left" class="modal-tool-button" type="button" aria-label="Otočiť doľava">↺</button>
+          <button id="gallery-rotate-right" class="modal-tool-button" type="button" aria-label="Otočiť doprava">↻</button>
+          <button id="gallery-reset-view" class="modal-tool-button modal-tool-button-text" type="button">Obnoviť pohľad</button>
+          <button id="gallery-fullscreen" class="modal-tool-button modal-tool-button-text" type="button">Na celú obrazovku</button>
+        </div>
+      </div>
+      <div class="modal-image-wrap" id="gallery-viewport">
+        <button id="gallery-prev" class="modal-arrow" type="button" aria-label="Predchádzajúca fotografia">‹</button>
+        <div class="gallery-stage" id="gallery-stage">
+          <img id="gallery-modal-image" class="gallery-modal-image" src="assets/galeria-karina.svg" alt="" width="1600" height="1200">
+          <canvas id="gallery-3d-canvas" class="gallery-3d-canvas" width="1" height="1" hidden></canvas>
+          <canvas id="gallery-3d-fallback" class="gallery-3d-canvas" width="1" height="1" hidden></canvas>
+        </div>
+          <p id="gallery-modal-fallback" class="gallery-inline-note" hidden>Náhradná ilustrácia – fotografia nie je dostupná.</p>
+          <p id="gallery-photo-hint" class="gallery-inline-note">Kolieskom približuj, potiahnutím posúvaj a tlačidlami môžeš fotografiu otáčať.</p>
+          <div id="gallery-3d-note" class="gallery-3d-note" hidden>
+            <strong>Ilustratívna 3D simulácia</strong>
+            <span>Táto scéna je umelecká priestorová vizualizácia inšpirovaná pôvodnou fotografiou.</span>
+          </div>
+        <div id="gallery-quality-panel" class="gallery-quality-panel" hidden>
+          <label for="gallery-quality" id="gallery-quality-label">Grafická kvalita</label>
+          <select id="gallery-quality">
+            <option value="auto" selected>Auto</option><option value="low">Nízka</option><option value="medium">Stredná</option>
+            <option value="high">Vysoká</option><option value="ultra">Ultra</option>
+          </select>
+          <output id="gallery-quality-resolution" for="gallery-quality"></output>
+          <button type="button" id="gallery-auto" aria-pressed="false">Automatická rotácia</button>
+        </div>
+        <div id="gallery-fullscreen-controls" class="gallery-fullscreen-controls" hidden>
+          <button id="gallery-fullscreen-exit" class="modal-tool-button" type="button">Ukončiť celú obrazovku</button>
+          <button id="gallery-fullscreen-reset" class="modal-tool-button" type="button">Obnoviť pohľad</button>
+        </div>
+        <button id="gallery-next" class="modal-arrow" type="button" aria-label="Nasledujúca fotografia">›</button>
+      </div>
+      <div class="modal-footer"><div><h3 id="gallery-modal-title">Kozmické útesy</h3><p id="gallery-modal-description"></p><p class="modal-credit" id="gallery-modal-credit"></p></div><a id="gallery-modal-source" href="https://esawebb.org/" target="_blank" rel="noopener noreferrer">Pôvodný zdroj ↗</a></div>
+    </div>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p><span aria-hidden="true">✦</span> Sprievodca vesmírom</p>
+      <p>Školský projekt • Technológie internetu</p>
+      <a href="#uvod">Späť hore ↑</a>
+    </div>
+  </footer>
+</body>
+</html>
