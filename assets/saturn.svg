@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" role="img" aria-label="Ilustrácia planéty">
+<defs>
+ <radialGradient id="sphere" cx="29%" cy="22%" r="80%"><stop offset="0" stop-color="#f3dea5"/><stop offset="0.52" stop-color="#bf9d66"/><stop offset="1" stop-color="#66536b"/></radialGradient>
+ <radialGradient id="shine" cx="25%" cy="15%" r="85%"><stop offset="0" stop-color="#ffffff" stop-opacity="0.15"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.22"/></radialGradient>
+ <clipPath id="planet"><circle cx="150" cy="150" r="81"/></clipPath>
+</defs>
+<g transform="rotate(-23 150 150)" fill="none" stroke-width="12" opacity="0.85">
+  <ellipse cx="150" cy="150" rx="139" ry="47" stroke="#9a8d77"/>
+  <ellipse cx="150" cy="150" rx="132" ry="43" stroke="#c7b898" stroke-width="9"/>
+  <ellipse cx="150" cy="150" rx="118" ry="37" stroke="#e5cb96" stroke-width="4"/>
+</g>
+<circle cx="150" cy="150" r="81" fill="url(#sphere)"/>
+<g clip-path="url(#planet)">
+<path d="M 30 47 C 90 32 199 43 273 55" fill="none" stroke="#f8ecc7" stroke-width="18" opacity="0.24"/>
+<path d="M 30 64 C 90 73 199 51 273 58" fill="none" stroke="#8e795e" stroke-width="18" opacity="0.24"/>
+<path d="M 30 75 C 90 67 199 88 273 76" fill="none" stroke="#d6bc8b" stroke-width="11" opacity="0.24"/>
+<path d="M 30 98 C 90 101 199 101 273 89" fill="none" stroke="#f8ecc7" stroke-width="21" opacity="0.24"/>
+<path d="M 30 110 C 90 95 199 96 273 107" fill="none" stroke="#8e795e" stroke-width="8" opacity="0.24"/>
+<path d="M 30 137 C 90 138 199 142 273 125" fill="none" stroke="#d6bc8b" stroke-width="20" opacity="0.24"/>
+<path d="M 30 150 C 90 162 199 157 273 155" fill="none" stroke="#f8ecc7" stroke-width="19" opacity="0.24"/>
+<path d="M 30 164 C 90 176 199 180 273 155" fill="none" stroke="#8e795e" stroke-width="17" opacity="0.24"/>
+<path d="M 30 181 C 90 196 199 165 273 192" fill="none" stroke="#d6bc8b" stroke-width="10" opacity="0.24"/>
+<path d="M 30 202 C 90 189 199 207 273 191" fill="none" stroke="#f8ecc7" stroke-width="12" opacity="0.24"/>
+<path d="M 30 217 C 90 228 199 211 273 221" fill="none" stroke="#8e795e" stroke-width="17" opacity="0.24"/>
+<path d="M 30 239 C 90 238 199 233 273 236" fill="none" stroke="#d6bc8b" stroke-width="13" opacity="0.24"/>
+<path d="M 30 256 C 90 243 199 259 273 251" fill="none" stroke="#f8ecc7" stroke-width="10" opacity="0.24"/>
+</g>
+<circle cx="150" cy="150" r="81" fill="url(#shine)"/>
+<g transform="rotate(-23 150 150)" fill="none" opacity=".75">
+  <path d="M 14 151 A 136 46 0 0 0 286 151" stroke="#d8c09b" stroke-width="11"/>
+  <path d="M 25 156 A 127 41 0 0 0 275 156" stroke="#8d7c67" stroke-width="3"/>
+</g>
+</svg>

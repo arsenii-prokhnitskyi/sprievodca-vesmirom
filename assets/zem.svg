@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" role="img" aria-label="Ilustrácia planéty">
+<defs>
+ <radialGradient id="sphere" cx="29%" cy="22%" r="80%"><stop offset="0" stop-color="#5dccfb"/><stop offset="0.52" stop-color="#246dc2"/><stop offset="1" stop-color="#09234e"/></radialGradient>
+ <radialGradient id="shine" cx="25%" cy="15%" r="85%"><stop offset="0" stop-color="#ffffff" stop-opacity="0.15"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.22"/></radialGradient>
+ <clipPath id="planet"><circle cx="150" cy="150" r="99"/></clipPath>
+</defs>
+<circle cx="150" cy="150" r="99" fill="url(#sphere)"/>
+<g clip-path="url(#planet)">
+<g fill="#3b9d7a" opacity=".95">
+ <path d="M 101 46 L 123 45 L 138 65 L 140 80 L 160 92 L 166 110 L 151 125 L 139 124 L 119 146 L 111 165 L 95 151 L 84 131 L 62 114 L 65 92 L 78 87 L 81 65 Z"/>
+ <path d="M 149 151 L 169 151 L 187 170 L 181 194 L 166 216 L 164 241 L 150 253 L 142 221 L 128 194 Z"/>
+ <path d="M 180 67 L 216 62 L 248 81 L 239 107 L 219 114 L 230 136 L 205 157 L 183 137 L 166 130 L 164 91 Z"/>
+ </g>
+ <g fill="#6ec3a5" opacity=".35"><path d="M 95 67 L 115 76 L 110 100 L 83 111 Z"/><path d="M 185 73 L 210 78 L 220 100 L 192 104 Z"/></g>
+ <g fill="none" stroke="#e5f6ff" stroke-width="10" opacity=".25"><path d="M 43 120 Q 95 102 138 126"/><path d="M 145 89 Q 190 82 254 106"/><path d="M 110 180 Q 180 165 250 183"/></g>
+</g>
+<circle cx="150" cy="150" r="99" fill="url(#shine)"/>
+</svg>

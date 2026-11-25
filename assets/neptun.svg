@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" role="img" aria-label="Ilustrácia planéty">
+<defs>
+ <radialGradient id="sphere" cx="29%" cy="22%" r="80%"><stop offset="0" stop-color="#6da9fa"/><stop offset="0.52" stop-color="#2351aa"/><stop offset="1" stop-color="#1b2f7b"/></radialGradient>
+ <radialGradient id="shine" cx="25%" cy="15%" r="85%"><stop offset="0" stop-color="#ffffff" stop-opacity="0.15"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.22"/></radialGradient>
+ <clipPath id="planet"><circle cx="150" cy="150" r="98"/></clipPath>
+</defs>
+<circle cx="150" cy="150" r="98" fill="url(#sphere)"/>
+<g clip-path="url(#planet)">
+<path d="M 30 37 C 90 35 199 53 273 39" fill="none" stroke="#a9dfff" stroke-width="9" opacity="0.24"/>
+<path d="M 30 63 C 90 76 199 66 273 52" fill="none" stroke="#102f7a" stroke-width="11" opacity="0.24"/>
+<path d="M 30 83 C 90 85 199 67 273 82" fill="none" stroke="#5794de" stroke-width="17" opacity="0.24"/>
+<path d="M 30 93 C 90 100 199 76 273 89" fill="none" stroke="#a9dfff" stroke-width="11" opacity="0.24"/>
+<path d="M 30 112 C 90 113 199 107 273 114" fill="none" stroke="#102f7a" stroke-width="8" opacity="0.24"/>
+<path d="M 30 137 C 90 148 199 138 273 136" fill="none" stroke="#5794de" stroke-width="15" opacity="0.24"/>
+<path d="M 30 148 C 90 149 199 150 273 143" fill="none" stroke="#a9dfff" stroke-width="10" opacity="0.24"/>
+<path d="M 30 173 C 90 168 199 164 273 175" fill="none" stroke="#102f7a" stroke-width="10" opacity="0.24"/>
+<path d="M 30 185 C 90 172 199 177 273 188" fill="none" stroke="#5794de" stroke-width="14" opacity="0.24"/>
+<path d="M 30 207 C 90 193 199 223 273 211" fill="none" stroke="#a9dfff" stroke-width="8" opacity="0.24"/>
+<path d="M 30 224 C 90 212 199 241 273 222" fill="none" stroke="#102f7a" stroke-width="20" opacity="0.24"/>
+<path d="M 30 245 C 90 239 199 242 273 239" fill="none" stroke="#5794de" stroke-width="19" opacity="0.24"/>
+<path d="M 30 258 C 90 265 199 257 273 264" fill="none" stroke="#a9dfff" stroke-width="10" opacity="0.24"/>
+<path d="M 93 193 Q 168 177 222 193" stroke="#b3daff" stroke-width="8" opacity=".3" fill="none"/>
+</g>
+<circle cx="150" cy="150" r="98" fill="url(#shine)"/>
+</svg>

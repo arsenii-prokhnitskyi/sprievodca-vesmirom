@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" role="img" aria-label="Ilustrácia planéty">
+<defs>
+ <radialGradient id="sphere" cx="29%" cy="22%" r="80%"><stop offset="0" stop-color="#ec986a"/><stop offset="0.52" stop-color="#b35134"/><stop offset="1" stop-color="#59272a"/></radialGradient>
+ <radialGradient id="shine" cx="25%" cy="15%" r="85%"><stop offset="0" stop-color="#ffffff" stop-opacity="0.15"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.22"/></radialGradient>
+ <clipPath id="planet"><circle cx="150" cy="150" r="95"/></clipPath>
+</defs>
+<circle cx="150" cy="150" r="95" fill="url(#sphere)"/>
+<g clip-path="url(#planet)">
+<ellipse cx="133" cy="229" rx="23" ry="5" transform="rotate(-6 133 229)" fill="#73372e" opacity=".18"/>
+<ellipse cx="161" cy="114" rx="11" ry="8" transform="rotate(14 161 114)" fill="#73372e" opacity=".18"/>
+<ellipse cx="152" cy="227" rx="33" ry="12" transform="rotate(15 152 227)" fill="#73372e" opacity=".18"/>
+<ellipse cx="230" cy="128" rx="26" ry="11" transform="rotate(34 230 128)" fill="#73372e" opacity=".18"/>
+<ellipse cx="137" cy="60" rx="30" ry="6" transform="rotate(-3 137 60)" fill="#73372e" opacity=".18"/>
+<ellipse cx="193" cy="217" rx="35" ry="7" transform="rotate(-35 193 217)" fill="#73372e" opacity=".18"/>
+<ellipse cx="177" cy="101" rx="10" ry="5" transform="rotate(34 177 101)" fill="#73372e" opacity=".18"/>
+<ellipse cx="122" cy="197" rx="19" ry="8" transform="rotate(-13 122 197)" fill="#73372e" opacity=".18"/>
+<ellipse cx="208" cy="179" rx="15" ry="9" transform="rotate(2 208 179)" fill="#73372e" opacity=".18"/>
+<ellipse cx="206" cy="118" rx="33" ry="11" transform="rotate(-3 206 118)" fill="#73372e" opacity=".18"/>
+<ellipse cx="192" cy="131" rx="35" ry="10" transform="rotate(10 192 131)" fill="#73372e" opacity=".18"/>
+<ellipse cx="101" cy="199" rx="9" ry="8" transform="rotate(33 101 199)" fill="#73372e" opacity=".18"/>
+<ellipse cx="188" cy="63" rx="33" ry="6" transform="rotate(28 188 63)" fill="#73372e" opacity=".18"/>
+<ellipse cx="153" cy="63" rx="12" ry="9" transform="rotate(-31 153 63)" fill="#73372e" opacity=".18"/>
+<ellipse cx="185" cy="150" rx="19" ry="6" transform="rotate(-18 185 150)" fill="#73372e" opacity=".18"/>
+<path d="M 75 76 Q 142 54 198 80" stroke="#fbd3a6" stroke-width="12" fill="none" opacity=".3"/>
+</g>
+<circle cx="150" cy="150" r="95" fill="url(#shine)"/>
+</svg>
